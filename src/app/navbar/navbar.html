@@ -1,0 +1,39 @@
+<nav class="bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      
+      <div class="flex-shrink-0 flex items-center">
+        <span class="text-2xl font-sans text-slate-800 tracking-tight">Gamiprog</span>
+      </div>
+
+      <div class="flex-1 flex justify-center px-6 lg:ml-6 lg:justify-end">
+        <div class="max-w-lg w-full lg:max-w-md">
+          <label for="search" class="sr-only">Buscar productos</label>
+          <div class="relative text-gray-400 focus-within:text-gray-600">
+            <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <input id="search" name="search" class="block w-full bg-gray-50 py-2 pl-10 pr-3 border border-gray-300 rounded-lg leading-5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors" placeholder="Buscar productos..." type="search">
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="http://localhost:4200/" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Inicio</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Productos</a>
+        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Contacto</a>
+      </div>
+
+      <div class="hidden sm:flex items-center ml-6 border-l border-gray-200 pl-6">
+        <app-auth-buttons></app-auth-buttons>
+      </div>
+
+      <div class="flex items-center md:hidden ml-4">
+        <button class="text-gray-600 hover:text-gray-900 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>
