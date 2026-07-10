@@ -1,0 +1,76 @@
+<!-- El contenedor ocupa el 100% de la altura de la ventana (h-screen) -->
+<div class="flex flex-col lg:flex-row h-screen bg-gray-100">
+  
+  <!-- ========================================== -->
+  <!-- COLUMNA IZQUIERDA: INSTRUCCIONES / Misión  -->
+  <!-- ========================================== -->
+  <div class="w-full lg:w-1/2 bg-white p-8 lg:p-12 overflow-y-auto border-r border-gray-200">
+    
+    <!-- Botón para escapar -->
+    <a routerLink="/" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 mb-8 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Abandonar misión
+    </a>
+
+    <!-- Cabecera de la misión -->
+    <div class="flex items-center space-x-3 mb-6">
+      <span class="bg-yellow-100 text-yellow-800 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Nivel 1</span>
+      <h1 class="text-3xl font-extrabold text-slate-800">Tu primer 'Hola Mundo'</h1>
+    </div>
+
+    <!-- Teoría -->
+    <p class="text-gray-600 mb-6 text-lg leading-relaxed">
+      Todo gran héroe comienza su viaje con un simple saludo. En el mundo de la programación, nuestro grito de batalla universal es el famoso <strong>Hola Mundo</strong>.
+    </p>
+
+    <!-- Caja de Objetivo (Quest) -->
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 mb-8 rounded-r-lg">
+      <h3 class="font-bold text-blue-800 flex items-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+        Objetivo de la misión
+      </h3>
+      <p class="text-blue-700">Imprime en la consola el texto exacto: <code class="bg-blue-200 text-blue-900 px-2 py-0.5 rounded ml-1 font-mono text-sm">"¡Hola Gamiprog!"</code></p>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- COLUMNA DERECHA: EDITOR DE CÓDIGO SIMULADO -->
+  <!-- ========================================== -->
+  <div class="w-full lg:w-1/2 bg-[#0f172a] flex flex-col h-full">
+    
+    <!-- Pestaña superior del editor -->
+    <div class="bg-slate-900 px-4 py-3 flex justify-between items-center border-b border-slate-800">
+      <div class="flex items-center space-x-2">
+        <span class="text-yellow-400">⚡</span>
+        <span class="text-slate-300 font-mono text-sm">mision-01.js</span>
+      </div>
+      
+      <button class="bg-green-500 hover:bg-green-400 text-slate-900 font-bold py-1.5 px-4 rounded-md text-sm transition-colors flex items-center shadow-lg shadow-green-500/20">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+        Ejecutar
+      </button>
+    </div>
+
+    <!-- Área de escritura de código -->
+    <div class="p-6 flex-grow font-mono text-sm text-gray-300 overflow-y-auto">
+      <div class="flex leading-loose">
+        <span class="text-slate-600 mr-4 select-none w-4 text-right">1</span>
+        <span><span class="text-pink-400">console</span>.<span class="text-blue-400">log</span>(<span class="text-yellow-300">"Escribe tu código aquí"</span>);</span>
+      </div>
+      <div class="flex leading-loose">
+        <span class="text-slate-600 mr-4 select-none w-4 text-right">2</span>
+        <span class="text-slate-500 italic">// Modifica la línea de arriba para superar la misión</span>
+      </div>
+    </div>
+
+    <!-- Consola de salida inferior -->
+    <div class="h-1/3 bg-black border-t border-slate-800 p-4 font-mono text-sm">
+      <div class="text-slate-500 mb-3 flex items-center">
+        <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded text-xs mr-2">TERMINAL</span> 
+        Salida del programa
+      </div>
+      <div class="text-green-400 opacity-70 animate-pulse">> Esperando a que el jugador ejecute el código...</div>
+    </div>
+
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './home/home';
 import { CursoDetalle } from './curso-detalle/curso-detalle';
+import { Leccion } from './leccion/leccion';
 
 export const routes: Routes = [
     // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
@@ -8,6 +9,8 @@ export const routes: Routes = [
   
   // 2. Ruta dinámica: El ':id' es una variable que cambiará según el curso
   { path: 'curso/:id', component: CursoDetalle }, 
+  
+  { path: 'leccion/:id', component: Leccion },
   
   // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
   { path: '**', redirectTo: '' }
