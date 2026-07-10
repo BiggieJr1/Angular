@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { Cursos } from '../services/cursos';
 import { Curso } from '../cursos.mock';
+import { RouterLink } from '@angular/router';
 
 // 1. Definimos la interfaz para las categorías
 interface Categoria {
@@ -13,16 +14,21 @@ interface Categoria {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-
   private cursoService = inject(Cursos);
 
   // 2. Iniciamos el arreglo vacío. Ya no tiene datos quemados aquí.
   cursos: Curso[] = [];
+
+  // Arreglo dinámico que cambiará según lo que el usuario seleccione
+  cursosFiltrados: Curso[] = [];
+
+  // Variable para saber qué botón debe verse "activo"
+  categoriaSeleccionada: string = 'Todos';
 
   categorias: Categoria[] = [
     { nombre: 'Frontend', icono: '💻' },
@@ -31,11 +37,23 @@ export class Home implements OnInit {
     { nombre: 'Bases de Datos', icono: '🗄️' },
     { nombre: 'Ciberseguridad', icono: '🛡️' },
     { nombre: 'Diseño UI/UX', icono: '🎨' },
-    { nombre: 'Cloud', icono: '☁️' }
+    { nombre: 'Cloud', icono: '☁️' },
   ];
 
   // 3. Cuando el componente carga, le pedimos los datos al servicio
   ngOnInit(): void {
     this.cursos = this.cursoService.obtenerCursos();
+    // Al iniciar, mostramos todos los cursos por defecto
+    this.cursosFiltrados = this.cursos;
+  }
+  filtrarPorCategoria(nombreCategoria: string) {
+    this.categoriaSeleccionada = nombreCategoria;
+
+    if (nombreCategoria === 'Todos') {
+      this.cursosFiltrados = this.cursos; // Si elige 'Todos', restauramos la lista completa
+    } else {
+      // Si elige otra cosa, filtramos el arreglo original
+      this.cursosFiltrados = this.cursos.filter(curso => curso.categoria === nombreCategoria);
+    }
   }
 }
