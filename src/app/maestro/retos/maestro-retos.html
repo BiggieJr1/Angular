@@ -1,0 +1,49 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-sans text-slate-900 mb-2">Mis retos</h1>
+      <p class="text-gray-500">Crea y edita los retos del catálogo.</p>
+    </div>
+    <a
+      routerLink="/maestro/retos/nuevo"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-sm transition-colors whitespace-nowrap"
+    >
+      + Nuevo reto
+    </a>
+  </div>
+
+  @if (cargando()) {
+    <p class="text-gray-500">Cargando retos...</p>
+  } @else {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+          <tr>
+            <th class="px-6 py-3">Título</th>
+            <th class="px-6 py-3">Categoría</th>
+            <th class="px-6 py-3">Nivel</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (reto of retos(); track reto.id) {
+            <tr>
+              <td class="px-6 py-4 text-sm text-slate-800">{{ reto.titulo }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ reto.categoria }}</td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ reto.duracion }}</td>
+              <td class="px-6 py-4 text-right">
+                <a [routerLink]="['/maestro/retos', reto.id, 'editar']" class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                  Editar
+                </a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-6 py-8 text-center text-gray-500">Todavía no hay retos. Crea el primero.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

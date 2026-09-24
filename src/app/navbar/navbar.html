@@ -22,6 +22,9 @@
         <a href="http://localhost:4200/" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Inicio</a>
         <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Productos</a>
         <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Contacto</a>
+        @if (usuarioActual()?.rol === 'Maestro' || usuarioActual()?.rol === 'Admin') {
+          <a routerLink="/maestro/retos" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Mis retos</a>
+        }
         @if (usuarioActual()?.rol === 'Admin') {
           <a routerLink="/admin/usuarios" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Admin</a>
         }
