@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../services/auth';
@@ -14,54 +14,54 @@ import { Usuario } from '../../models/auth.model';
 export class AuthButtons implements OnInit {
  private authService = inject(Auth);
 
-  isModalOpen = false;
-  isLoginMode = true; // Para saber si mostramos "Entrar" o "Registrar"
+  isModalOpen = signal(false);
+  isLoginMode = signal(true); // Para saber si mostramos "Entrar" o "Registrar"
 
   // Variables conectadas al formulario
   emailInput = '';
   passInput = '';
   nombreInput = '';
-  mensajeError = '';
+  mensajeError = signal('');
 
   // Aquí guardaremos los datos del jugador si tiene sesión activa
-  jugadorActual: Usuario | null = null;
+  jugadorActual = signal<Usuario | null>(null);
 
   ngOnInit() {
     // Al cargar la página, revisamos si ya había alguien logueado (sesión con JWT guardada)
-    this.jugadorActual = this.authService.obtenerUsuarioActual();
+    this.jugadorActual.set(this.authService.obtenerUsuarioActual());
   }
 
   abrirModal(esLogin: boolean) {
-    this.isLoginMode = esLogin;
-    this.isModalOpen = true;
-    this.mensajeError = '';
+    this.isLoginMode.set(esLogin);
+    this.isModalOpen.set(true);
+    this.mensajeError.set('');
     this.emailInput = '';
     this.passInput = '';
     this.nombreInput = '';
   }
 
   cerrarModal() {
-    this.isModalOpen = false;
+    this.isModalOpen.set(false);
   }
 
   ejecutarAccion() {
-    const accion$ = this.isLoginMode
+    const accion$ = this.isLoginMode()
       ? this.authService.iniciarSesion(this.emailInput, this.passInput)
       : this.authService.registrar(this.emailInput, this.passInput, this.nombreInput);
 
     accion$.subscribe({
       next: usuario => {
-        this.jugadorActual = usuario;
+        this.jugadorActual.set(usuario);
         this.cerrarModal();
       },
       error: (error: HttpErrorResponse) => {
-        this.mensajeError = this.mensajeDeError(error);
+        this.mensajeError.set(this.mensajeDeError(error));
       },
     });
   }
 
   private mensajeDeError(error: HttpErrorResponse): string {
-    if (this.isLoginMode) {
+    if (this.isLoginMode()) {
       return 'Correo o contraseña incorrectos.';
     }
     if (error.status === 409) {
@@ -73,8 +73,13 @@ export class AuthButtons implements OnInit {
     return 'Ocurrió un error al conectar con el servidor. Intenta de nuevo.';
   }
 
+  alternarModo() {
+    this.isLoginMode.set(!this.isLoginMode());
+    this.mensajeError.set('');
+  }
+
   cerrarSesionJugador() {
     this.authService.cerrarSesion();
-    this.jugadorActual = null;
+    this.jugadorActual.set(null);
   }
 }

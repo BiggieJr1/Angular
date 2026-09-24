@@ -20,7 +20,7 @@
   </a>
 
   <!-- BLOQUE IF: Si el curso existe, dibujamos la interfaz -->
-  @if (curso) {
+  @if (curso(); as curso) {
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <!-- Cabecera visual (Banner) -->
       <div class="h-48 md:h-64 bg-gradient-to-r {{ curso.gradienteBg }} flex items-end p-8">
@@ -139,7 +139,7 @@
 <!-- ========================================== -->
 <!-- NOTIFICACIÓN TOAST FLOTANTE                -->
 <!-- ========================================== -->
-@if (mostrarToast) {
+@if (mostrarToast()) {
   <div class="fixed bottom-8 right-8 bg-slate-900 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-4 z-50">
     
     <!-- Ícono de éxito (Palomita verde) -->
@@ -160,7 +160,7 @@
     </a>
     
     <!-- Botón para cerrar manualmente por si no quieren esperar los 3 segundos -->
-    <button (click)="mostrarToast = false" class="ml-4 text-gray-400 hover:text-white focus:outline-none transition-colors">
+    <button (click)="mostrarToast.set(false)" class="ml-4 text-gray-400 hover:text-white focus:outline-none transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
