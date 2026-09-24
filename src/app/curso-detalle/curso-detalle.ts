@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { inject } from '@angular/core';
+import { inject, signal } from '@angular/core';
 import { Cursos } from '../services/cursos';
-import { Curso } from '../cursos.mock';
+import { Curso } from '../models/reto.model';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
@@ -17,25 +17,31 @@ export class CursoDetalle implements OnInit {
   private cursoService = inject(Cursos);
 
   // Variable para guardar el curso encontrado
-  curso: Curso | undefined;
+  curso = signal<Curso | undefined>(undefined);
 
-  mostrarToast = false;
+  mostrarToast = signal(false);
 
   ngOnInit(): void {
-    // 1. Extraemos el 'id' de la URL (ej: /curso/2 -> extrae el 2)
-    // Usamos Number() para convertir el texto de la URL a un número matemático
-    const idParam = Number(this.route.snapshot.paramMap.get('id'));
-    
-    // 2. Buscamos el curso utilizando el servicio
-    this.curso = this.cursoService.obtenerCursoPorId(idParam);
+    // 1. Extraemos el 'id' de la URL (ej: /curso/3fa8...) - los retos usan GUID, no un número
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam) {
+      this.curso.set(undefined);
+      return;
+    }
+
+    // 2. Buscamos el curso utilizando el servicio; si el backend responde 404, no existe
+    this.cursoService.obtenerCursoPorId(idParam).subscribe({
+      next: curso => this.curso.set(curso),
+      error: () => this.curso.set(undefined),
+    });
   }
 
   inscribirse() {
-    this.mostrarToast = true;
-    
+    this.mostrarToast.set(true);
+
     // 3. El setTimeout oculta el Toast automáticamente después de 3.5 segundos
     setTimeout(() => {
-      this.mostrarToast = false;
+      this.mostrarToast.set(false);
     }, 3500);
   }
 }
