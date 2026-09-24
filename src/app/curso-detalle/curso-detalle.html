@@ -23,9 +23,13 @@
   @if (curso(); as curso) {
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <!-- Cabecera visual (Banner) -->
-      <div class="h-48 md:h-64 bg-gradient-to-r {{ curso.gradienteBg }} flex items-end p-8">
+      <div class="relative h-48 md:h-64 bg-gradient-to-r {{ curso.gradienteBg }} flex items-end p-8 overflow-hidden">
+        @if (curso.imagenUrl) {
+          <img [src]="curso.imagenUrl" [alt]="curso.categoria" class="absolute inset-0 w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        }
         <span
-          class="text-white/90 font-black text-4xl md:text-6xl uppercase tracking-wider mb-[-10px]"
+          class="relative text-white/90 font-black text-4xl md:text-6xl uppercase tracking-wider mb-[-10px]"
           >{{ curso.categoria }}</span
         >
       </div>
