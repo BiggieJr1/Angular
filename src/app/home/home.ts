@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { inject, signal } from '@angular/core';
+import { inject, signal, viewChild, ElementRef } from '@angular/core';
 import { Cursos } from '../services/cursos';
 import { Curso } from '../models/reto.model';
 import { RouterLink } from '@angular/router';
@@ -20,6 +20,9 @@ interface Categoria {
 })
 export class Home implements OnInit {
   private cursoService = inject(Cursos);
+
+  // Referencia al contenedor con scroll horizontal de categorías, para las flechitas
+  private categoriasCarrusel = viewChild<ElementRef<HTMLDivElement>>('categoriasCarrusel');
 
   // 2. Iniciamos el arreglo vacío. Ya no tiene datos quemados aquí.
   cursos = signal<Curso[]>([]);
@@ -48,6 +51,11 @@ export class Home implements OnInit {
       this.cursosFiltrados.set(cursos);
     });
   }
+  // direccion: -1 para desplazar a la izquierda, 1 para desplazar a la derecha
+  desplazarCategorias(direccion: -1 | 1) {
+    this.categoriasCarrusel()?.nativeElement.scrollBy({ left: direccion * 300, behavior: 'smooth' });
+  }
+
   filtrarPorCategoria(nombreCategoria: string) {
     this.categoriaSeleccionada = nombreCategoria;
 
