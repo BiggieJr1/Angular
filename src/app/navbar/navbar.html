@@ -22,6 +22,9 @@
         <a href="http://localhost:4200/" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Inicio</a>
         <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Productos</a>
         <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Contacto</a>
+        @if (usuarioActual()?.rol === 'Admin') {
+          <a routerLink="/admin/usuarios" class="text-gray-600 hover:text-blue-600 font-medium transition-colors text-sm">Admin</a>
+        }
       </div>
 
       <div class="hidden sm:flex items-center ml-6 border-l border-gray-200 pl-6">

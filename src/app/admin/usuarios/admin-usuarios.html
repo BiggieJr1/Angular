@@ -1,0 +1,57 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <h1 class="text-3xl font-sans text-slate-900 mb-2">Administración de usuarios</h1>
+  <p class="text-gray-500 mb-8">Asigna quién es Estudiante, Maestro o Admin.</p>
+
+  @if (errorGeneral()) {
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-6 rounded text-sm font-medium">
+      {{ errorGeneral() }}
+    </div>
+  }
+
+  @if (cargando()) {
+    <p class="text-gray-500">Cargando usuarios...</p>
+  } @else {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+          <tr>
+            <th class="px-6 py-3">Correo</th>
+            <th class="px-6 py-3">Rol</th>
+            <th class="px-6 py-3">Registrado</th>
+            <th class="px-6 py-3">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (usuario of usuarios(); track usuario.usuarioId) {
+            <tr>
+              <td class="px-6 py-4 text-sm text-slate-800">{{ usuario.email }}</td>
+              <td class="px-6 py-4">
+                <select
+                  [disabled]="guardandoId() === usuario.usuarioId"
+                  (change)="cambiarRol(usuario, $any($event.target).value)"
+                  class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                >
+                  @for (rol of roles; track rol) {
+                    <option [value]="rol" [selected]="rol === usuario.rol">{{ rol }}</option>
+                  }
+                </select>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ usuario.fechaCreacion | date: 'short' }}</td>
+              <td class="px-6 py-4 text-sm">
+                @if (usuario.activo) {
+                  <span class="text-green-700 font-medium">Activo</span>
+                } @else {
+                  <span class="text-red-700 font-medium">Inactivo</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay usuarios registrados.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,8 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../services/auth';
-import { Usuario } from '../../models/auth.model';
 
 @Component({
   selector: 'app-auth-buttons',
@@ -11,27 +10,20 @@ import { Usuario } from '../../models/auth.model';
   templateUrl: './auth-buttons.html',
   styleUrl: './auth-buttons.css',
 })
-export class AuthButtons implements OnInit {
+export class AuthButtons {
  private authService = inject(Auth);
 
-  // Estado del modal: vive en Auth para que otros componentes (ej. "Inscribirme"
-  // en un reto) también puedan abrirlo cuando hace falta iniciar sesión.
+  // Estado compartido en Auth: así otros componentes (ej. "Inscribirme" en un reto,
+  // o el link de Admin en el navbar) también reaccionan al mismo login/logout.
   isModalOpen = this.authService.isModalOpen;
   isLoginMode = this.authService.isLoginMode; // Para saber si mostramos "Entrar" o "Registrar"
+  jugadorActual = this.authService.usuarioActual;
 
   // Variables conectadas al formulario
   emailInput = '';
   passInput = '';
   nombreInput = '';
   mensajeError = signal('');
-
-  // Aquí guardaremos los datos del jugador si tiene sesión activa
-  jugadorActual = signal<Usuario | null>(null);
-
-  ngOnInit() {
-    // Al cargar la página, revisamos si ya había alguien logueado (sesión con JWT guardada)
-    this.jugadorActual.set(this.authService.obtenerUsuarioActual());
-  }
 
   abrirModal(esLogin: boolean) {
     this.authService.abrirModal(esLogin);
@@ -51,10 +43,7 @@ export class AuthButtons implements OnInit {
       : this.authService.registrar(this.emailInput, this.passInput, this.nombreInput);
 
     accion$.subscribe({
-      next: usuario => {
-        this.jugadorActual.set(usuario);
-        this.cerrarModal();
-      },
+      next: () => this.cerrarModal(),
       error: (error: HttpErrorResponse) => {
         this.mensajeError.set(this.mensajeDeError(error));
       },
@@ -81,6 +70,5 @@ export class AuthButtons implements OnInit {
 
   cerrarSesionJugador() {
     this.authService.cerrarSesion();
-    this.jugadorActual.set(null);
   }
 }

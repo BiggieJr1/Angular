@@ -16,6 +16,10 @@ export class Auth {
   isModalOpen = signal(false);
   isLoginMode = signal(true);
 
+  // Usuario con sesión activa, compartido para que cualquier componente (navbar,
+  // guards, etc.) reaccione a un login/logout sin tener que recargar la página.
+  usuarioActual = signal<Usuario | null>(this.obtenerSesion());
+
   abrirModal(esLogin: boolean) {
     this.isLoginMode.set(esLogin);
     this.isModalOpen.set(true);
@@ -43,6 +47,7 @@ export class Auth {
           token: respuesta.token,
         };
         localStorage.setItem(this.sesionKey, JSON.stringify(sesion));
+        this.usuarioActual.set({ usuarioId: sesion.usuarioId, email: sesion.email, rol: sesion.rol });
       }),
       map(respuesta => ({ usuarioId: respuesta.usuarioId, email: respuesta.email, rol: respuesta.rol }))
     );
@@ -51,11 +56,12 @@ export class Auth {
   // 3. CERRAR SESIÓN
   cerrarSesion() {
     localStorage.removeItem(this.sesionKey);
+    this.usuarioActual.set(null);
   }
 
   // 4. SABER QUIÉN ESTÁ CONECTADO
   obtenerUsuarioActual(): Usuario | null {
-    return this.obtenerSesion();
+    return this.usuarioActual();
   }
 
   // Usado por el interceptor para adjuntar el Bearer token a las peticiones protegidas
