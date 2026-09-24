@@ -77,12 +77,6 @@
     </p>
   </div>
 
-  @if (requiereSesion()) {
-    <div class="text-center py-10 text-amber-800 bg-amber-50 rounded-xl border border-dashed border-amber-300 mb-8">
-      <p>Inicia sesión para ver el catálogo de retos.</p>
-    </div>
-  }
-
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
     @for (curso of cursosFiltrados(); track curso.id) {
       <div

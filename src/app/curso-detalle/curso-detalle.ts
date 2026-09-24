@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { inject, signal } from '@angular/core';
 import { Cursos } from '../services/cursos';
+import { Auth } from '../services/auth';
 import { Curso } from '../models/reto.model';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -15,6 +16,7 @@ export class CursoDetalle implements OnInit {
   // Inyectamos las herramientas necesarias
   private route = inject(ActivatedRoute);
   private cursoService = inject(Cursos);
+  private authService = inject(Auth);
 
   // Variable para guardar el curso encontrado
   curso = signal<Curso | undefined>(undefined);
@@ -37,6 +39,12 @@ export class CursoDetalle implements OnInit {
   }
 
   inscribirse() {
+    // Explorar el catálogo es público, pero inscribirse requiere cuenta
+    if (!this.authService.obtenerUsuarioActual()) {
+      this.authService.abrirModal(true);
+      return;
+    }
+
     this.mostrarToast.set(true);
 
     // 3. El setTimeout oculta el Toast automáticamente después de 3.5 segundos

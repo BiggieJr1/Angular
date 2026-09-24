@@ -27,9 +27,6 @@ export class Home implements OnInit {
   // Arreglo dinámico que cambiará según lo que el usuario seleccione
   cursosFiltrados = signal<Curso[]>([]);
 
-  // Se activa cuando el catálogo requiere sesión iniciada (los retos están protegidos en la API)
-  requiereSesion = signal(false);
-
   // Variable para saber qué botón debe verse "activo"
   categoriaSeleccionada: string = 'Todos';
 
@@ -43,17 +40,12 @@ export class Home implements OnInit {
     { nombre: 'Cloud', icono: '☁️' },
   ];
 
-  // 3. Cuando el componente carga, le pedimos los datos al servicio
+  // 3. Cuando el componente carga, le pedimos los datos al servicio (catálogo público, sin login)
   ngOnInit(): void {
-    this.cursoService.obtenerCursos().subscribe({
-      next: cursos => {
-        this.cursos.set(cursos);
-        // Al iniciar, mostramos todos los cursos por defecto
-        this.cursosFiltrados.set(cursos);
-      },
-      error: error => {
-        this.requiereSesion.set(error?.status === 401);
-      },
+    this.cursoService.obtenerCursos().subscribe(cursos => {
+      this.cursos.set(cursos);
+      // Al iniciar, mostramos todos los cursos por defecto
+      this.cursosFiltrados.set(cursos);
     });
   }
   filtrarPorCategoria(nombreCategoria: string) {
