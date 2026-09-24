@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, switchMap, tap } from 'rxjs';
 import { API_BASE_URL } from '../core/api-config';
@@ -10,6 +10,20 @@ import { LoginResponse, RegisterResponse, SesionActual, Usuario } from '../model
 export class Auth {
   private http = inject(HttpClient);
   private sesionKey = 'gamiprog_sesion_actual';
+
+  // Estado del modal de login/registro, compartido para que cualquier componente
+  // (ej. "Inscribirme" en un reto) pueda pedir que el usuario inicie sesión.
+  isModalOpen = signal(false);
+  isLoginMode = signal(true);
+
+  abrirModal(esLogin: boolean) {
+    this.isLoginMode.set(esLogin);
+    this.isModalOpen.set(true);
+  }
+
+  cerrarModal() {
+    this.isModalOpen.set(false);
+  }
 
   // 1. REGISTRAR USUARIO (el backend no devuelve token al registrar, así que iniciamos sesión después)
   registrar(email: string, password: string, nombre: string): Observable<Usuario> {

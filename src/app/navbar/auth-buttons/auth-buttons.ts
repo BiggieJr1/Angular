@@ -14,8 +14,10 @@ import { Usuario } from '../../models/auth.model';
 export class AuthButtons implements OnInit {
  private authService = inject(Auth);
 
-  isModalOpen = signal(false);
-  isLoginMode = signal(true); // Para saber si mostramos "Entrar" o "Registrar"
+  // Estado del modal: vive en Auth para que otros componentes (ej. "Inscribirme"
+  // en un reto) también puedan abrirlo cuando hace falta iniciar sesión.
+  isModalOpen = this.authService.isModalOpen;
+  isLoginMode = this.authService.isLoginMode; // Para saber si mostramos "Entrar" o "Registrar"
 
   // Variables conectadas al formulario
   emailInput = '';
@@ -32,8 +34,7 @@ export class AuthButtons implements OnInit {
   }
 
   abrirModal(esLogin: boolean) {
-    this.isLoginMode.set(esLogin);
-    this.isModalOpen.set(true);
+    this.authService.abrirModal(esLogin);
     this.mensajeError.set('');
     this.emailInput = '';
     this.passInput = '';
@@ -41,7 +42,7 @@ export class AuthButtons implements OnInit {
   }
 
   cerrarModal() {
-    this.isModalOpen.set(false);
+    this.authService.cerrarModal();
   }
 
   ejecutarAccion() {
