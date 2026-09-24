@@ -1,45 +1,37 @@
-import { Service } from '@angular/core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, switchMap, tap } from 'rxjs';
+import { API_BASE_URL } from '../core/api-config';
+import { LoginResponse, RegisterResponse, SesionActual, Usuario } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
 })
-
-//@Service()
 export class Auth {
-    // Nombres de nuestras "tablas" en el localStorage
-  private usuariosKey = 'gamiprog_usuarios';
+  private http = inject(HttpClient);
   private sesionKey = 'gamiprog_sesion_actual';
 
-  // 1. REGISTRAR USUARIO
-  registrar(email: string, pass: string): boolean {
-    const usuarios = this.obtenerTodosLosUsuarios();
-    
-    // Verificamos si el correo ya existe
-    if (usuarios.find((u: any) => u.email === email)) {
-      return false; // Falló el registro (ya existe)
-    }
-
-    // Guardamos el nuevo usuario
-    usuarios.push({ email, pass, xp: 0, nivel: 1 }); // Le damos stats de jugador
-    localStorage.setItem(this.usuariosKey, JSON.stringify(usuarios));
-    
-    // Iniciamos sesión automáticamente tras registrarse
-    this.iniciarSesion(email, pass);
-    return true; 
+  // 1. REGISTRAR USUARIO (el backend no devuelve token al registrar, así que iniciamos sesión después)
+  registrar(email: string, password: string, nombre: string): Observable<Usuario> {
+    return this.http
+      .post<RegisterResponse>(`${API_BASE_URL}/security/register`, { email, password, nombre })
+      .pipe(switchMap(() => this.iniciarSesion(email, password)));
   }
 
   // 2. INICIAR SESIÓN
-  iniciarSesion(email: string, pass: string): boolean {
-    const usuarios = this.obtenerTodosLosUsuarios();
-    const usuarioValido = usuarios.find((u: any) => u.email === email && u.pass === pass);
-    
-    if (usuarioValido) {
-      // Guardamos la sesión activa
-      localStorage.setItem(this.sesionKey, JSON.stringify(usuarioValido));
-      return true;
-    }
-    return false; // Credenciales incorrectas
+  iniciarSesion(email: string, password: string): Observable<Usuario> {
+    return this.http.post<LoginResponse>(`${API_BASE_URL}/security/login`, { email, password }).pipe(
+      tap(respuesta => {
+        const sesion: SesionActual = {
+          usuarioId: respuesta.usuarioId,
+          email: respuesta.email,
+          rol: respuesta.rol,
+          token: respuesta.token,
+        };
+        localStorage.setItem(this.sesionKey, JSON.stringify(sesion));
+      }),
+      map(respuesta => ({ usuarioId: respuesta.usuarioId, email: respuesta.email, rol: respuesta.rol }))
+    );
   }
 
   // 3. CERRAR SESIÓN
@@ -48,14 +40,17 @@ export class Auth {
   }
 
   // 4. SABER QUIÉN ESTÁ CONECTADO
-  obtenerUsuarioActual() {
-    const sesion = localStorage.getItem(this.sesionKey);
-    return sesion ? JSON.parse(sesion) : null;
+  obtenerUsuarioActual(): Usuario | null {
+    return this.obtenerSesion();
   }
 
-  // Utilidad interna para leer el "caché"
-  private obtenerTodosLosUsuarios(): any[] {
-    const data = localStorage.getItem(this.usuariosKey);
-    return data ? JSON.parse(data) : [];
+  // Usado por el interceptor para adjuntar el Bearer token a las peticiones protegidas
+  obtenerToken(): string | null {
+    return this.obtenerSesion()?.token ?? null;
+  }
+
+  private obtenerSesion(): SesionActual | null {
+    const data = localStorage.getItem(this.sesionKey);
+    return data ? JSON.parse(data) : null;
   }
 }

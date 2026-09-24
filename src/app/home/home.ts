@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { Cursos } from '../services/cursos';
-import { Curso } from '../cursos.mock';
+import { Curso } from '../models/reto.model';
 import { RouterLink } from '@angular/router';
 
 // 1. Definimos la interfaz para las categorías
@@ -42,9 +42,11 @@ export class Home implements OnInit {
 
   // 3. Cuando el componente carga, le pedimos los datos al servicio
   ngOnInit(): void {
-    this.cursos = this.cursoService.obtenerCursos();
-    // Al iniciar, mostramos todos los cursos por defecto
-    this.cursosFiltrados = this.cursos;
+    this.cursoService.obtenerCursos().subscribe(cursos => {
+      this.cursos = cursos;
+      // Al iniciar, mostramos todos los cursos por defecto
+      this.cursosFiltrados = cursos;
+    });
   }
   filtrarPorCategoria(nombreCategoria: string) {
     this.categoriaSeleccionada = nombreCategoria;
