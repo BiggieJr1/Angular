@@ -4,10 +4,12 @@ import { Observable, map } from 'rxjs';
 import { API_BASE_URL } from '../core/api-config';
 import { ConsultarRetoResponse, Curso } from '../models/reto.model';
 
-// Las claves deben coincidir con las categorías del carrusel de filtros en home.ts
-const ESTILOS_POR_CATEGORIA: Record<string, { gradienteBg: string; badgeColor: string }> = {
-  Frontend: { gradienteBg: 'from-red-500 to-pink-500', badgeColor: 'bg-red-100 text-red-800' },
-  Backend: { gradienteBg: 'from-green-500 to-emerald-600', badgeColor: 'bg-green-100 text-green-800' },
+// Las claves deben coincidir con las categorías del carrusel de filtros en home.ts.
+// imagenUrl es opcional: solo Frontend y Backend tienen imagen propia por ahora: el
+// resto sigue con el degradado de color hasta que existan sus imágenes.
+const ESTILOS_POR_CATEGORIA: Record<string, { gradienteBg: string; badgeColor: string; imagenUrl?: string }> = {
+  Frontend: { gradienteBg: 'from-red-500 to-pink-500', badgeColor: 'bg-red-100 text-red-800', imagenUrl: 'img/categorias/frontend.jpg' },
+  Backend: { gradienteBg: 'from-green-500 to-emerald-600', badgeColor: 'bg-green-100 text-green-800', imagenUrl: 'img/categorias/backend.jpg' },
   DevOps: { gradienteBg: 'from-blue-500 to-cyan-500', badgeColor: 'bg-blue-100 text-blue-800' },
   'Bases de Datos': { gradienteBg: 'from-purple-500 to-indigo-500', badgeColor: 'bg-purple-100 text-purple-800' },
   Ciberseguridad: { gradienteBg: 'from-slate-700 to-slate-900', badgeColor: 'bg-slate-200 text-slate-800' },
@@ -26,6 +28,7 @@ function aCurso(reto: ConsultarRetoResponse): Curso {
     duracion: `Nivel ${reto.dificultad}/5`,
     gradienteBg: estilo.gradienteBg,
     badgeColor: estilo.badgeColor,
+    imagenUrl: estilo.imagenUrl,
   };
 }
 

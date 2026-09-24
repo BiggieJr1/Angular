@@ -12,8 +12,10 @@ export interface ConsultarRetoResponse {
   resueltoPorUsuario: boolean;
 }
 
-// Modelo que consumen los componentes de catálogo/detalle. gradienteBg y badgeColor son
-// puramente de presentación y no existen en el backend: se derivan por categoría en Cursos.
+// Modelo que consumen los componentes de catálogo/detalle. gradienteBg, badgeColor e
+// imagenUrl son puramente de presentación y no existen en el backend: se derivan por
+// categoría en Cursos. imagenUrl es opcional porque no todas las categorías tienen
+// imagen propia todavía; sin ella se usa el degradado de color como respaldo.
 export interface Curso {
   id: string;
   titulo: string;
@@ -22,4 +24,5 @@ export interface Curso {
   duracion: string;
   gradienteBg: string;
   badgeColor: string;
+  imagenUrl?: string;
 }
