@@ -36,6 +36,9 @@ export class CursoForm implements OnInit {
   retosDisponibles = signal<RetoResumen[]>([]);
   retoIdSeleccionado = '';
 
+  private indiceArrastrado: number | null = null;
+  indiceSobrevolado: number | null = null;
+
   cargando = signal(false);
   guardando = signal(false);
   errorGeneral = signal('');
@@ -124,6 +127,45 @@ export class CursoForm implements OnInit {
     this.cursosAdmin.quitarMision(this.cursoId, retoId).subscribe({
       next: curso => this.misiones.set(curso.misiones),
       error: () => this.errorGeneral.set('No se pudo quitar esa misión.'),
+    });
+  }
+
+  arrastrarInicio(indice: number): void {
+    this.indiceArrastrado = indice;
+  }
+
+  arrastrarSobre(indice: number): void {
+    this.indiceSobrevolado = indice;
+  }
+
+  arrastrarFin(): void {
+    this.indiceArrastrado = null;
+    this.indiceSobrevolado = null;
+  }
+
+  soltar(indiceDestino: number): void {
+    const indiceOrigen = this.indiceArrastrado;
+    this.indiceArrastrado = null;
+    this.indiceSobrevolado = null;
+
+    if (!this.cursoId || indiceOrigen === null || indiceOrigen === indiceDestino) {
+      return;
+    }
+
+    const nuevasMisiones = [...this.misiones()];
+    const [movida] = nuevasMisiones.splice(indiceOrigen, 1);
+    nuevasMisiones.splice(indiceDestino, 0, movida);
+
+    const misionesAnteriores = this.misiones();
+    this.misiones.set(nuevasMisiones);
+
+    const retoIds = nuevasMisiones.map(m => m.retoId);
+    this.cursosAdmin.reordenarMisiones(this.cursoId, retoIds).subscribe({
+      next: curso => this.misiones.set(curso.misiones),
+      error: () => {
+        this.misiones.set(misionesAnteriores);
+        this.errorGeneral.set('No se pudo reordenar las misiones.');
+      },
     });
   }
 

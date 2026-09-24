@@ -33,4 +33,8 @@ export class CursosAdmin {
   quitarMision(cursoId: string, retoId: string): Observable<CursoConMisiones> {
     return this.http.delete<CursoConMisiones>(`${API_BASE_URL}/cursos/${cursoId}/misiones/${retoId}`);
   }
+
+  reordenarMisiones(cursoId: string, retoIds: string[]): Observable<CursoConMisiones> {
+    return this.http.put<CursoConMisiones>(`${API_BASE_URL}/cursos/${cursoId}/misiones/orden`, { retoIds });
+  }
 }
