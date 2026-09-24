@@ -6,6 +6,8 @@ import { AdminUsuarios } from './admin/usuarios/admin-usuarios';
 import { adminGuard } from './admin/admin.guard';
 import { MaestroRetos } from './maestro/retos/maestro-retos';
 import { RetoForm } from './maestro/retos/form/reto-form';
+import { MaestroCursos } from './maestro/cursos/maestro-cursos';
+import { CursoForm } from './maestro/cursos/form/curso-form';
 import { maestroGuard } from './maestro/maestro.guard';
 
 export const routes: Routes = [
@@ -24,6 +26,9 @@ export const routes: Routes = [
   { path: 'maestro/retos', component: MaestroRetos, canActivate: [maestroGuard] },
   { path: 'maestro/retos/nuevo', component: RetoForm, canActivate: [maestroGuard] },
   { path: 'maestro/retos/:id/editar', component: RetoForm, canActivate: [maestroGuard] },
+  { path: 'maestro/cursos', component: MaestroCursos, canActivate: [maestroGuard] },
+  { path: 'maestro/cursos/nuevo', component: CursoForm, canActivate: [maestroGuard] },
+  { path: 'maestro/cursos/:id/editar', component: CursoForm, canActivate: [maestroGuard] },
 
   // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
   { path: '**', redirectTo: '' }
