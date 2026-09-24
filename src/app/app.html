@@ -1,14 +1,16 @@
 <main class="p-8 bg-gray-100 min-h-screen flex flex-col">
   <app-navbar></app-navbar>
   
-  <!-- Contenedor del Banner de Gamiprog -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-    <img 
-      src="Gemini_Generated_Image_r0zz4fr0zz4fr0zz.png" 
-      alt="Gamiprog - Nueva aventura de código" 
-      class="w-full h-auto rounded-2xl shadow-md object-cover"
-    >
-  </div>
+  <!-- Contenedor del Banner de Gamiprog: solo en el home -->
+  @if (enHome()) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <img
+        src="Gemini_Generated_Image_r0zz4fr0zz4fr0zz.png"
+        alt="Gamiprog - Nueva aventura de código"
+        class="w-full h-auto flex rounded-2xl shadow-md object-cover"
+      >
+    </div>
+  }
 
   <router-outlet></router-outlet>
 </main>
