@@ -74,10 +74,20 @@
         @if (misiones().length === 0) {
           <p class="text-gray-500 text-sm mb-6">Este curso todavía no tiene misiones.</p>
         } @else {
+          <p class="text-gray-400 text-xs mb-2">Arrastra una misión para cambiar su orden.</p>
           <ol class="divide-y divide-gray-100 mb-6">
-            @for (mision of misiones(); track mision.retoId) {
-              <li class="py-3 text-sm flex items-center justify-between gap-4">
-                <div>
+            @for (mision of misiones(); track mision.retoId; let i = $index) {
+              <li
+                draggable="true"
+                (dragstart)="arrastrarInicio(i)"
+                (dragover)="$event.preventDefault(); arrastrarSobre(i)"
+                (dragend)="arrastrarFin()"
+                (drop)="$event.preventDefault(); soltar(i)"
+                class="py-3 text-sm flex items-center justify-between gap-4 cursor-move"
+                [class.bg-blue-50]="indiceSobrevolado === i"
+              >
+                <div class="flex items-center">
+                  <span class="text-gray-300 mr-3 select-none">⠿⠿</span>
                   <span class="text-gray-400 mr-2">{{ mision.orden }}.</span>
                   <span class="font-medium text-slate-800">{{ mision.titulo }}</span>
                   <span class="text-gray-500 ml-2">({{ mision.categoria }}, nivel {{ mision.dificultad }}/5)</span>
