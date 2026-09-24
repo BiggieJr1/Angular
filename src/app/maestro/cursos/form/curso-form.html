@@ -1,0 +1,127 @@
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <a routerLink="/maestro/cursos" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 mb-6 transition-colors">
+    ← Volver a mis cursos
+  </a>
+
+  <h1 class="text-3xl font-sans text-slate-900 mb-8">
+    {{ cursoId ? 'Editar curso' : 'Nuevo curso' }}
+  </h1>
+
+  @if (errorGeneral()) {
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-6 rounded text-sm font-medium">
+      {{ errorGeneral() }}
+    </div>
+  }
+
+  @if (mensajeExito()) {
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-6 rounded text-sm font-medium">
+      {{ mensajeExito() }}
+    </div>
+  }
+
+  @if (cargando()) {
+    <p class="text-gray-500">Cargando...</p>
+  } @else {
+    <form (ngSubmit)="guardar()" class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+        <input
+          type="text"
+          [(ngModel)]="form.titulo"
+          name="titulo"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+        <textarea
+          [(ngModel)]="form.descripcion"
+          name="descripcion"
+          required
+          rows="3"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+        <select
+          [(ngModel)]="form.categoria"
+          name="categoria"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+        >
+          @for (categoria of categorias; track categoria) {
+            <option [value]="categoria">{{ categoria }}</option>
+          }
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="guardando()"
+        class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors disabled:opacity-50"
+      >
+        {{ guardando() ? 'Guardando...' : (cursoId ? 'Guardar cambios' : 'Crear curso') }}
+      </button>
+    </form>
+
+    @if (cursoId) {
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-8">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Misiones</h2>
+
+        @if (misiones().length === 0) {
+          <p class="text-gray-500 text-sm mb-6">Este curso todavía no tiene misiones.</p>
+        } @else {
+          <ol class="divide-y divide-gray-100 mb-6">
+            @for (mision of misiones(); track mision.retoId) {
+              <li class="py-3 text-sm flex items-center justify-between gap-4">
+                <div>
+                  <span class="text-gray-400 mr-2">{{ mision.orden }}.</span>
+                  <span class="font-medium text-slate-800">{{ mision.titulo }}</span>
+                  <span class="text-gray-500 ml-2">({{ mision.categoria }}, nivel {{ mision.dificultad }}/5)</span>
+                </div>
+                <button
+                  type="button"
+                  (click)="quitarMision(mision.retoId)"
+                  class="text-red-600 hover:text-red-700 font-medium text-sm"
+                >
+                  Quitar
+                </button>
+              </li>
+            }
+          </ol>
+        }
+
+        @if (retosParaAgregar().length === 0) {
+          <p class="text-gray-500 text-sm">No hay más retos disponibles para agregar (o ya están todos en este curso).</p>
+        } @else {
+          <div class="flex items-end gap-3">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Agregar misión</label>
+              <select
+                [(ngModel)]="retoIdSeleccionado"
+                name="retoSeleccionado"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              >
+                <option value="">Elige un reto...</option>
+                @for (reto of retosParaAgregar(); track reto.id) {
+                  <option [value]="reto.id">{{ reto.titulo }} ({{ reto.categoria }})</option>
+                }
+              </select>
+            </div>
+            <button
+              type="button"
+              (click)="agregarMision()"
+              [disabled]="!retoIdSeleccionado"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg transition-colors text-sm disabled:opacity-50"
+            >
+              + Agregar
+            </button>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
