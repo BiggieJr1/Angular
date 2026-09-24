@@ -5,6 +5,7 @@
         <h2 class="text-xl font-sans text-slate-800">Explorar por área</h2>
         <div class="hidden sm:flex space-x-2">
           <button
+            (click)="desplazarCategorias(-1)"
             class="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
           >
             <svg
@@ -22,6 +23,7 @@
             </svg>
           </button>
           <button
+            (click)="desplazarCategorias(1)"
             class="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
           >
             <svg
@@ -42,6 +44,7 @@
       </div>
 
       <div
+        #categoriasCarrusel
         class="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <!-- BUCLE FOR PARA EL CARRUSEL -->
