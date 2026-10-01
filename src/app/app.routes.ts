@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
-import { Home } from './home/home';
-import { CursoDetalle } from './curso-detalle/curso-detalle';
-import { Leccion } from './leccion/leccion';
-import { AdminUsuarios } from './admin/usuarios/admin-usuarios';
-import { adminGuard } from './admin/admin.guard';
-import { MaestroRetos } from './maestro/retos/maestro-retos';
-import { RetoForm } from './maestro/retos/form/reto-form';
-import { MaestroCursos } from './maestro/cursos/maestro-cursos';
-import { CursoForm } from './maestro/cursos/form/curso-form';
-import { maestroGuard } from './maestro/maestro.guard';
+import { Home } from './pages/home/home';
+import { CursoDetalle } from './pages/cursos/detalle-curso/detalle-curso';
+import { Leccion } from './pages/cursos/leccion/leccion';
+import { AdminUsuarios } from './pages/usuarios/usuarios';
+import { adminGuard } from './core/guards/admin.guard';
+import { MaestroRetos } from './pages/retos/retos';
+import { RetoForm } from './pages/retos/formulario-retos/formulario-retos';
+import { MaestroCursos } from './pages/cursos/cursos';
+import { CursoForm } from './pages/cursos/formulario-curso/formulario-curso';
+import { maestroGuard } from './core/guards/maestro.guard';
 
 export const routes: Routes = [
-    // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
+  // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
   { path: '', component: Home },
 
   // 2. Ruta dinámica: El ':id' es una variable que cambiará según el curso
@@ -31,5 +31,5 @@ export const routes: Routes = [
   { path: 'maestro/cursos/:id/editar', component: CursoForm, canActivate: [maestroGuard] },
 
   // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
