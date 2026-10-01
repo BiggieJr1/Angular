@@ -23,3 +23,12 @@ export interface CursoFormValue {
   descripcion: string;
   categoria: string;
 }
+
+// HU-10: estado de una misión para el alumno que tiene sesión iniciada.
+export type EstadoMision = 'resuelta' | 'pendiente';
+
+// Solo los campos que usamos de GET /api/retos/{usuarioId}/intentos.
+export interface IntentoUsuario {
+  retoId: string;
+  aprobado: boolean;
+}

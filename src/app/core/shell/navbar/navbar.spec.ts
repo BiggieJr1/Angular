@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Navbar } from './navbar';
+import { provideRouter } from '@angular/router';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -20,3 +21,8 @@ describe('Navbar', () => {
     expect(component).toBeTruthy();
   });
 });
+
+await TestBed.configureTestingModule({
+  imports: [Navbar],
+  providers: [provideRouter([])],
+}).compileComponents();

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { provideRouter } from '@angular/router';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -21,3 +22,8 @@ describe('App', () => {
     expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Angular');
   });
 });
+
+await TestBed.configureTestingModule({
+  imports: [App],
+  providers: [provideRouter([])],
+}).compileComponents();

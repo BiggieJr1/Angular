@@ -9,6 +9,8 @@ import { RetoForm } from './pages/retos/formulario-retos/formulario-retos';
 import { MaestroCursos } from './pages/cursos/cursos';
 import { CursoForm } from './pages/cursos/formulario-curso/formulario-curso';
 import { maestroGuard } from './core/guards/maestro.guard';
+import { CatalogoCursos } from './pages/cursos/catalogo-cursos/catalogo-cursos';
+import { RutaCurso } from './pages/cursos/ruta-curso/ruta-curso';
 
 export const routes: Routes = [
   // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
@@ -32,4 +34,8 @@ export const routes: Routes = [
 
   // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
   { path: '**', redirectTo: '' },
+
+  // HU-10: Cursos como secuencia ordenada de misiones (retos)
+  { path: 'cursos', component: CatalogoCursos },
+  { path: 'cursos/:id', component: RutaCurso },
 ];
