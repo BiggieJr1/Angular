@@ -1,5 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { AuthButtons } from './auth-buttons/auth-buttons';
 import { AuthService } from '../../data-access/auth.service';
 
@@ -16,7 +18,19 @@ import { AuthService } from '../../data-access/auth.service';
 })
 export class Navbar {
   private authService = inject(AuthService);
+  private router = inject(Router);
+
   usuarioActual = this.authService.usuarioActual;
+
+  private urlActual = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  mostrarBusqueda = computed(() => this.urlActual().split('?')[0] !== '/');
 
   visible = signal(true);
   private ultimoScroll = 0;

@@ -2,27 +2,45 @@
 <!-- BARRA SUPERIOR (NAVBAR)                    -->
 <!-- ========================================== -->
 <div class="flex items-center space-x-3">
-
   @if (jugadorActual()) {
     <!-- VISTA: USUARIO LOGUEADO -->
-    <div class="flex items-center space-x-4 bg-gray-50 px-4 py-2 rounded-xl border border-gray-200">
-      <div class="text-right">
-        <p class="text-xs font-bold text-slate-800">{{ jugadorActual()?.email }}</p>
-        <p class="text-xs text-blue-600 font-black">{{ jugadorActual()?.rol }}</p>
-      </div>
-      <button (click)="cerrarSesionJugador()" class="text-gray-400 hover:text-red-500 transition-colors" title="Cerrar sesión">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+    <div class="flex items-center gap-3">
+      <span
+        class="hidden lg:inline max-w-[140px] truncate text-sm font-semibold text-slate-800"
+        [title]="jugadorActual()?.nombre ?? ''"
+      >
+        {{ jugadorActual()?.nombre ?? 'Mi cuenta' }}
+      </span>
+
+      <button
+        type="button"
+        (click)="cerrarSesionJugador()"
+        class="flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-slate-700 px-4 py-2 rounded-full border border-gray-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          ></path>
+        </svg>
+        Cerrar sesión
       </button>
     </div>
   } @else {
     <!-- VISTA: USUARIO NO LOGUEADO -->
-    <button (click)="abrirModal(true)"
-      class="text-sm font-semibold text-slate-700 px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:text-slate-900 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
+    <button
+      (click)="abrirModal(true)"
+      class="text-sm font-semibold text-slate-700 px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:text-slate-900 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+    >
       Iniciar sesión
     </button>
 
-    <button (click)="abrirModal(false)"
-      class="text-sm font-bold text-white px-5 py-2 rounded-full bg-slate-900 hover:bg-slate-800 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2">
+    <button
+      (click)="abrirModal(false)"
+      class="text-sm font-bold text-white px-5 py-2 rounded-full bg-slate-900 hover:bg-slate-800 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+    >
       Registrarse
     </button>
   }
@@ -32,11 +50,30 @@
 <!-- VENTANA FLOTANTE (MODAL)                   -->
 <!-- ========================================== -->
 @if (isModalOpen()) {
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" (click)="cerrarModal()">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative" (click)="$event.stopPropagation()">
-
-      <button type="button" (click)="cerrarModal()" aria-label="Cerrar" class="absolute top-4 right-4 text-gray-400 hover:text-slate-800 transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    (click)="cerrarModal()"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        (click)="cerrarModal()"
+        aria-label="Cerrar"
+        class="absolute top-4 right-4 text-gray-400 hover:text-slate-800 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
       </button>
 
       <div class="p-8">
@@ -47,7 +84,10 @@
 
         <!-- Mensaje de Error dinámico -->
         @if (mensajeError()) {
-          <div role="alert" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm font-medium">
+          <div
+            role="alert"
+            class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm font-medium"
+          >
             {{ mensajeError() }}
           </div>
         }
@@ -56,25 +96,58 @@
           <!-- Nombre (solo aplica al registrar una cuenta nueva) -->
           @if (!isLoginMode()) {
             <div>
-              <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-              <input id="nombre" type="text" name="nombre" [(ngModel)]="nombreInput" autocomplete="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors" placeholder="Tu nombre">
+              <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1"
+                >Nombre</label
+              >
+              <input
+                id="nombre"
+                type="text"
+                name="nombre"
+                [(ngModel)]="nombreInput"
+                autocomplete="name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                placeholder="Tu nombre"
+              />
             </div>
           }
 
           <!-- Correo (conectado con ngModel) -->
           <div>
-            <label for="correo" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-            <input id="correo" type="email" name="correo" [(ngModel)]="emailInput" autocomplete="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors" placeholder="tu@correo.com">
+            <label for="correo" class="block text-sm font-medium text-gray-700 mb-1"
+              >Correo electrónico</label
+            >
+            <input
+              id="correo"
+              type="email"
+              name="correo"
+              [(ngModel)]="emailInput"
+              autocomplete="email"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              placeholder="tu@correo.com"
+            />
           </div>
 
           <!-- Contraseña (conectada con ngModel) -->
           <div>
-            <label for="clave" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-            <input id="clave" type="password" name="clave" [(ngModel)]="passInput" [attr.autocomplete]="isLoginMode() ? 'current-password' : 'new-password'" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors" placeholder="••••••••">
+            <label for="clave" class="block text-sm font-medium text-gray-700 mb-1"
+              >Contraseña</label
+            >
+            <input
+              id="clave"
+              type="password"
+              name="clave"
+              [(ngModel)]="passInput"
+              [attr.autocomplete]="isLoginMode() ? 'current-password' : 'new-password'"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              placeholder="••••••••"
+            />
           </div>
 
           <!-- Botón de Ejecutar -->
-          <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors mt-2">
+          <button
+            type="submit"
+            class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors mt-2"
+          >
             {{ isLoginMode() ? 'Entrar al juego' : 'Crear mi personaje' }}
           </button>
         </form>
@@ -82,7 +155,11 @@
         <!-- Enlace para alternar entre Login y Registro -->
         <p class="text-center text-sm text-gray-600 mt-6">
           {{ isLoginMode() ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?' }}
-          <button type="button" (click)="alternarModo()" class="text-blue-600 hover:text-blue-700 font-bold cursor-pointer">
+          <button
+            type="button"
+            (click)="alternarModo()"
+            class="text-blue-600 hover:text-blue-700 font-bold cursor-pointer"
+          >
             {{ isLoginMode() ? 'Regístrate aquí' : 'Inicia sesión' }}
           </button>
         </p>
