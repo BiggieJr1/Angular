@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthButtons } from './auth-buttons/auth-buttons';
 import { AuthService } from '../../data-access/auth.service';
@@ -8,8 +8,30 @@ import { AuthService } from '../../data-access/auth.service';
   imports: [AuthButtons, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  host: {
+    class: 'transition-transform duration-300',
+    '[class.-translate-y-full]': '!visible()',
+    '(window:scroll)': 'onScroll()',
+  },
 })
 export class Navbar {
   private authService = inject(AuthService);
   usuarioActual = this.authService.usuarioActual;
+
+  visible = signal(true);
+  private ultimoScroll = 0;
+
+  onScroll() {
+    const actual = window.scrollY;
+
+    if (actual <= 64) {
+      this.visible.set(true);
+    } else if (actual > this.ultimoScroll) {
+      this.visible.set(false);
+    } else if (actual < this.ultimoScroll) {
+      this.visible.set(true);
+    }
+
+    this.ultimoScroll = actual;
+  }
 }
