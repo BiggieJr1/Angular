@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { inject, signal, viewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Cursos } from '../services/cursos';
 import { Curso } from '../models/reto.model';
-import { RouterLink } from '@angular/router';
 
-// 1. Definimos la interfaz para las categorías
+// Definimos la interfaz para las categorías
 interface Categoria {
   nombre: string;
   icono: string;
@@ -21,17 +19,14 @@ interface Categoria {
 export class Home implements OnInit {
   private cursoService = inject(Cursos);
 
-  // Referencia al contenedor con scroll horizontal de categorías, para las flechitas
-  private categoriasCarrusel = viewChild<ElementRef<HTMLDivElement>>('categoriasCarrusel');
-
-  // 2. Iniciamos el arreglo vacío. Ya no tiene datos quemados aquí.
+  // Todos los cursos que llegan del servicio
   cursos = signal<Curso[]>([]);
 
-  // Arreglo dinámico que cambiará según lo que el usuario seleccione
+  // Cursos que se muestran según la categoría seleccionada
   cursosFiltrados = signal<Curso[]>([]);
 
-  // Variable para saber qué botón debe verse "activo"
-  categoriaSeleccionada: string = 'Todos';
+  // Categoría activa. Vacío = sin filtro (se muestran todos)
+  categoriaSeleccionada: string = '';
 
   categorias: Categoria[] = [
     { nombre: 'Frontend', icono: '💻' },
@@ -43,7 +38,7 @@ export class Home implements OnInit {
     { nombre: 'Cloud', icono: '☁️' },
   ];
 
-  // 3. Cuando el componente carga, le pedimos los datos al servicio (catálogo público, sin login)
+  // Cuando el componente carga, le pedimos los datos al servicio (catálogo público, sin login)
   ngOnInit(): void {
     this.cursoService.obtenerCursos().subscribe(cursos => {
       this.cursos.set(cursos);
@@ -51,19 +46,23 @@ export class Home implements OnInit {
       this.cursosFiltrados.set(cursos);
     });
   }
-  // direccion: -1 para desplazar a la izquierda, 1 para desplazar a la derecha
-  desplazarCategorias(direccion: -1 | 1) {
-    this.categoriasCarrusel()?.nativeElement.scrollBy({ left: direccion * 300, behavior: 'smooth' });
+
+  // Cuántos cursos hay en una categoría (para el contador de cada tarjeta)
+  contarCursos(categoria: string): number {
+    return this.cursos().filter(c => c.categoria === categoria).length;
   }
 
   filtrarPorCategoria(nombreCategoria: string) {
-    this.categoriaSeleccionada = nombreCategoria;
+    // Si haces clic en la que ya estaba seleccionada, se quita el filtro
+    this.categoriaSeleccionada =
+      this.categoriaSeleccionada === nombreCategoria ? '' : nombreCategoria;
 
-    if (nombreCategoria === 'Todos') {
-      this.cursosFiltrados.set(this.cursos()); // Si elige 'Todos', restauramos la lista completa
+    if (this.categoriaSeleccionada === '') {
+      this.cursosFiltrados.set(this.cursos());
     } else {
-      // Si elige otra cosa, filtramos el arreglo original
-      this.cursosFiltrados.set(this.cursos().filter(curso => curso.categoria === nombreCategoria));
+      this.cursosFiltrados.set(
+        this.cursos().filter(curso => curso.categoria === this.categoriaSeleccionada)
+      );
     }
   }
 }

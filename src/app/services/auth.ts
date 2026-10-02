@@ -23,10 +23,12 @@ export class Auth {
   abrirModal(esLogin: boolean) {
     this.isLoginMode.set(esLogin);
     this.isModalOpen.set(true);
+    document.body.classList.add('overflow-hidden');
   }
 
   cerrarModal() {
     this.isModalOpen.set(false);
+    document.body.classList.remove('overflow-hidden');
   }
 
   // 1. REGISTRAR USUARIO (el backend no devuelve token al registrar, así que iniciamos sesión después)
