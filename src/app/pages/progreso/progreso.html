@@ -1,0 +1,140 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-3xl font-sans text-slate-900 sm:text-4xl">Mi progreso</h1>
+    <p class="mt-3 text-lg text-gray-500">Cuántos retos has resuelto y cuáles te faltan.</p>
+  </div>
+
+  @if (!usuarioActual()) {
+    <div class="text-center py-12 bg-blue-50 border border-blue-100 rounded-2xl">
+      <p class="text-blue-900 mb-4">Inicia sesión para ver tu progreso.</p>
+      <button
+        (click)="iniciarSesion()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-colors"
+      >
+        Iniciar sesión
+      </button>
+    </div>
+  } @else if (cargando()) {
+    <p class="text-gray-500">Cargando tu progreso...</p>
+  } @else if (error()) {
+    <div class="text-center py-10 text-red-700 bg-red-50 rounded-xl border border-red-200">
+      <p>No se pudo cargar tu progreso. Intenta de nuevo en unos minutos.</p>
+    </div>
+  } @else if (datos()) {
+    <!-- Retos resueltos vs. total -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div class="flex items-end justify-between mb-3">
+        <div>
+          <p class="text-sm text-gray-500">Retos resueltos</p>
+          <p class="text-3xl font-extrabold text-slate-900">
+            {{ resueltos().length }}
+            <span class="text-lg font-medium text-gray-400">de {{ totalRetos() }}</span>
+          </p>
+        </div>
+        <span class="text-2xl font-bold text-green-600">{{ porcentaje() }}%</span>
+      </div>
+      <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div class="h-full bg-green-500 transition-all" [style.width.%]="porcentaje()"></div>
+      </div>
+    </div>
+
+    <!-- Nivel, puntos, insignias y aciertos (si el usuario ya tiene puntuación) -->
+    @if (progreso(); as p) {
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm text-gray-500">Nivel</p>
+          <p class="text-2xl font-extrabold text-slate-900">{{ p.nivelActual }}</p>
+          <p class="text-xs text-gray-400 mt-1">{{ p.experiencia }} XP</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm text-gray-500">Puntos</p>
+          <p class="text-2xl font-extrabold text-slate-900">{{ p.puntosTotales }}</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm text-gray-500">Insignias</p>
+          <p class="text-2xl font-extrabold text-slate-900">{{ p.totalInsignias }}</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <p class="text-sm text-gray-500">Aciertos</p>
+          <p class="text-2xl font-extrabold text-slate-900">{{ p.tasaAciertos }}%</p>
+          <p class="text-xs text-gray-400 mt-1">{{ p.totalAprobados }} de {{ p.totalIntentos }} intentos</p>
+        </div>
+      </div>
+    }
+
+    <!-- Pendientes y resueltos -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Me faltan ({{ pendientes().length }})</h2>
+        <ul class="space-y-2">
+          @for (reto of pendientes(); track reto.retoId) {
+            <li>
+              <a
+                [routerLink]="['/curso', reto.retoId]"
+                class="flex items-center justify-between gap-3 border border-gray-100 rounded-xl p-3 hover:border-blue-300 hover:bg-blue-50/40 transition-colors"
+              >
+                <div class="min-w-0">
+                  <p class="font-semibold text-slate-800 truncate">{{ reto.titulo }}</p>
+                  <p class="text-sm text-gray-500">{{ reto.categoria }} · Nivel {{ reto.dificultad }}/5</p>
+                </div>
+                <span class="shrink-0 text-sm font-medium text-blue-600">Resolver</span>
+              </a>
+            </li>
+          } @empty {
+            <li class="text-center py-6 text-green-700 bg-green-50 rounded-xl border border-green-200">
+              ¡Resolviste todos los retos disponibles!
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Resueltos ({{ resueltos().length }})</h2>
+        <ul class="space-y-2">
+          @for (reto of resueltos(); track reto.retoId) {
+            <li>
+              <a
+                [routerLink]="['/curso', reto.retoId]"
+                class="flex items-center justify-between gap-3 border border-gray-100 rounded-xl p-3 hover:border-green-300 hover:bg-green-50/40 transition-colors"
+              >
+                <div class="min-w-0">
+                  <p class="font-semibold text-slate-800 truncate">{{ reto.titulo }}</p>
+                  <p class="text-sm text-gray-500">{{ reto.categoria }} · Nivel {{ reto.dificultad }}/5</p>
+                </div>
+                <span class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                  ✓ Resuelto
+                </span>
+              </a>
+            </li>
+          } @empty {
+            <li class="text-center py-6 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+              Aún no has resuelto ningún reto.
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+
+    <!-- Desempeño por lenguaje -->
+    @if (progreso(); as p) {
+      @if (p.porLenguaje.length > 0) {
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+          <h2 class="text-xl font-bold text-slate-800 mb-4">Desempeño por lenguaje</h2>
+          <ul class="space-y-4">
+            @for (l of p.porLenguaje; track l.lenguaje) {
+              <li>
+                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                  <span class="font-medium text-slate-800">{{ l.lenguaje }}</span>
+                  <span>{{ l.totalAprobados }} de {{ l.totalIntentos }} intentos · {{ l.tasaAciertos }}%</span>
+                </div>
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-500" [style.width.%]="l.tasaAciertos"></div>
+                </div>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    }
+  }
+</div>

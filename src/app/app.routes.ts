@@ -11,6 +11,8 @@ import { CursoForm } from './pages/cursos/formulario-curso/formulario-curso';
 import { maestroGuard } from './core/guards/maestro.guard';
 import { CatalogoCursos } from './pages/cursos/catalogo-cursos/catalogo-cursos';
 import { RutaCurso } from './pages/cursos/ruta-curso/ruta-curso';
+import { sesionGuard } from './core/guards/sesion.guard';
+import { MiProgreso } from './pages/progreso/progreso';
 
 export const routes: Routes = [
   // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
@@ -31,6 +33,9 @@ export const routes: Routes = [
   { path: 'maestro/cursos', component: MaestroCursos, canActivate: [maestroGuard] },
   { path: 'maestro/cursos/nuevo', component: CursoForm, canActivate: [maestroGuard] },
   { path: 'maestro/cursos/:id/editar', component: CursoForm, canActivate: [maestroGuard] },
+
+  // HU-11: cualquier usuario con sesión puede ver su propio progreso (ver sesion.guard.ts)
+  { path: 'mi-progreso', component: MiProgreso, canActivate: [sesionGuard] },
 
   // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
   { path: '**', redirectTo: '' },
