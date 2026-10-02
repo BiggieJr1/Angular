@@ -9,6 +9,7 @@ import { AuthService } from '../../../data-access/auth.service';
   imports: [FormsModule],
   templateUrl: './auth-buttons.html',
   styleUrl: './auth-buttons.css',
+  host: { '(document:keydown.escape)': 'cerrarModal()' }
 })
 export class AuthButtons {
   private authService = inject(AuthService);
