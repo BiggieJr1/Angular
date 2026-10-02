@@ -18,7 +18,13 @@ export class AuthService {
 
   // Usuario con sesión activa, compartido para que cualquier componente (navbar,
   // guards, etc.) reaccione a un login/logout sin tener que recargar la página.
-  usuarioActual = signal<Usuario | null>(this.obtenerSesion());
+  usuarioActual = signal<Usuario | null>(this.usuarioDesdeSesion());
+
+  constructor() {
+    // Al recargar la página, la sesión se restaura y hay que volver a pedir el nombre
+    const usuario = this.usuarioActual();
+    if (usuario) this.cargarNombre(usuario.usuarioId);
+  }
 
   abrirModal(esLogin: boolean) {
     this.isLoginMode.set(esLogin);
@@ -56,6 +62,7 @@ export class AuthService {
             email: sesion.email,
             rol: sesion.rol,
           });
+          this.cargarNombre(sesion.usuarioId); // <- nuevo
         }),
         map((respuesta) => ({
           usuarioId: respuesta.usuarioId,
@@ -84,5 +91,23 @@ export class AuthService {
   private obtenerSesion(): SesionActual | null {
     const data = localStorage.getItem(this.sesionKey);
     return data ? JSON.parse(data) : null;
+  }
+
+  private cargarNombre(usuarioId: string) {
+    this.http.get<{ nombre: string }>(`${API_BASE_URL}/usuarios/${usuarioId}/perfil`).subscribe({
+      next: (perfil) =>
+        this.usuarioActual.update((u) =>
+          // Solo si sigue siendo el mismo usuario (por si cerró sesión mientras cargaba)
+          u && u.usuarioId === usuarioId ? { ...u, nombre: perfil.nombre } : u,
+        ),
+      error: () => {
+        // Sin perfil o fallo de red: se queda el respaldo "Mi cuenta"
+      },
+    });
+  }
+
+  private usuarioDesdeSesion(): Usuario | null {
+    const sesion = this.obtenerSesion();
+    return sesion ? { usuarioId: sesion.usuarioId, email: sesion.email, rol: sesion.rol } : null;
   }
 }

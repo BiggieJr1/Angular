@@ -2,6 +2,7 @@ export interface Usuario {
   usuarioId: string;
   email: string;
   rol: string;
+  nombre?: string;
 }
 
 export interface SesionActual extends Usuario {
