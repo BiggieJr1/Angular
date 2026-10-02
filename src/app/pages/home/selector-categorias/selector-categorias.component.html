@@ -1,0 +1,35 @@
+<h2 class="text-xl font-sans text-slate-800 mb-4">Explorar por área</h2>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+  @for (cat of categorias(); track cat.nombre) {
+    <button
+      type="button"
+      (click)="seleccionar.emit(cat.nombre)"
+      [class]="
+        seleccionada() === cat.nombre
+          ? 'border-slate-900 bg-slate-900 text-white shadow-lg'
+          : 'border-gray-200 bg-white text-slate-800 hover:border-slate-400 hover:shadow-md hover:-translate-y-0.5'
+      "
+      class="group flex cursor-pointer items-center gap-4 border rounded-2xl p-3 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+    >
+      <span
+        [class]="
+          seleccionada() === cat.nombre ? 'bg-white/15' : 'bg-slate-100 group-hover:bg-slate-200'
+        "
+        class="flex items-center justify-center w-12 h-12 rounded-xl text-2xl transition-colors"
+      >
+        {{ cat.icono }}
+      </span>
+
+      <span class="flex flex-col leading-tight">
+        <span class="font-semibold">{{ cat.nombre }}</span>
+        <span
+          [class]="seleccionada() === cat.nombre ? 'text-slate-300' : 'text-gray-500'"
+          class="text-xs"
+        >
+          {{ conteos()[cat.nombre] ?? 0 }} cursos
+        </span>
+      </span>
+    </button>
+  }
+</div>
