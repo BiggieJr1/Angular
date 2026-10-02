@@ -1,41 +1,55 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { CursoDetalle } from './pages/cursos/detalle-curso/detalle-curso';
-import { Leccion } from './pages/cursos/leccion/leccion';
-import { AdminUsuarios } from './pages/usuarios/usuarios';
 import { adminGuard } from './core/guards/admin.guard';
-import { MaestroRetos } from './pages/retos/retos';
-import { RetoForm } from './pages/retos/formulario-retos/formulario-retos';
-import { MaestroCursos } from './pages/cursos/cursos';
-import { CursoForm } from './pages/cursos/formulario-curso/formulario-curso';
 import { maestroGuard } from './core/guards/maestro.guard';
-import { CatalogoCursos } from './pages/cursos/catalogo-cursos/catalogo-cursos';
-import { RutaCurso } from './pages/cursos/ruta-curso/ruta-curso';
 
 export const routes: Routes = [
-  // 1. Cuando la URL esté vacía (Inicio), carga el HomeComponent
-  { path: '', component: Home },
+  //Públicas
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+  },
+  {
+    path: 'cursos',
+    loadChildren: () => import('./pages/cursos/cursos.routes').then((m) => m.CURSOS_ROUTES),
+  },
+  {
+    path: 'curso/:id',
+    loadComponent: () =>
+      import('./pages/cursos/detalle-curso/detalle-curso').then((m) => m.CursoDetalle),
+  },
+  {
+    path: 'leccion/:id',
+    loadComponent: () => import('./pages/cursos/leccion/leccion').then((m) => m.Leccion),
+  },
 
-  // 2. Ruta dinámica: El ':id' es una variable que cambiará según el curso
-  { path: 'curso/:id', component: CursoDetalle },
+  //Solo Admin
+  {
+    path: 'admin/usuarios',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./pages/usuarios/usuarios').then((m) => m.AdminUsuarios),
+  },
 
-  { path: 'leccion/:id', component: Leccion },
+  //Maestro o Admin
+  {
+    path: 'maestro',
+    canActivate: [maestroGuard],
+    children: [
+      {
+        path: 'retos',
+        loadChildren: () => import('./pages/retos/retos.routes').then((m) => m.RETOS_ROUTES),
+      },
+      {
+        path: 'cursos',
+        loadChildren: () =>
+          import('./pages/cursos/cursos-maestro.routes').then((m) => m.CURSOS_MAESTRO_ROUTES),
+      },
+    ],
+  },
 
-  // Solo Admin puede entrar; cualquier otro rebota al home (ver admin.guard.ts)
-  { path: 'admin/usuarios', component: AdminUsuarios, canActivate: [adminGuard] },
-
-  // Solo Maestro o Admin pueden entrar (ver maestro.guard.ts)
-  { path: 'maestro/retos', component: MaestroRetos, canActivate: [maestroGuard] },
-  { path: 'maestro/retos/nuevo', component: RetoForm, canActivate: [maestroGuard] },
-  { path: 'maestro/retos/:id/editar', component: RetoForm, canActivate: [maestroGuard] },
-  { path: 'maestro/cursos', component: MaestroCursos, canActivate: [maestroGuard] },
-  { path: 'maestro/cursos/nuevo', component: CursoForm, canActivate: [maestroGuard] },
-  { path: 'maestro/cursos/:id/editar', component: CursoForm, canActivate: [maestroGuard] },
-
-  // 3. Comodín de seguridad: Si escriben una URL que no existe, los regresa al inicio
-  { path: '**', redirectTo: '' },
-
-  // HU-10: Cursos como secuencia ordenada de misiones (retos)
-  { path: 'cursos', component: CatalogoCursos },
-  { path: 'cursos/:id', component: RutaCurso },
+  //Comodín
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
