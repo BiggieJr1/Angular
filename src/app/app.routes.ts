@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin.guard';
 import { maestroGuard } from './core/guards/maestro.guard';
+import { sesionGuard } from './core/guards/sesion.guard';
 
 export const routes: Routes = [
   //Públicas
@@ -20,6 +21,13 @@ export const routes: Routes = [
   {
     path: 'leccion/:id',
     loadComponent: () => import('./pages/cursos/leccion/leccion').then((m) => m.Leccion),
+  },
+
+  //Requiere sesión
+  {
+    path: 'mi-progreso',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/progreso/progreso').then((m) => m.MiProgreso),
   },
 
   //Solo Admin
