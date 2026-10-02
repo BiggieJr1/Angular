@@ -1,0 +1,97 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <a
+    routerLink="/cursos"
+    class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 mb-6 transition-colors"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </svg>
+    Volver a los cursos
+  </a>
+
+  @if (cargando()) {
+    <p class="text-gray-500">Cargando curso...</p>
+  } @else if (curso(); as curso) {
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+      <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+        {{ curso.categoria }}
+      </span>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-4 mb-3">{{ curso.titulo }}</h1>
+      <p class="text-lg text-gray-600 mb-8 leading-relaxed">{{ curso.descripcion }}</p>
+
+      <!-- Progreso del alumno -->
+      @if (progresoDisponible()) {
+        <div class="mb-8">
+          <div class="flex justify-between text-sm text-gray-600 mb-2">
+            <span>{{ totalResueltas() }} de {{ misiones().length }} misiones resueltas</span>
+            <span>{{ porcentaje() }}%</span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-green-500 transition-all" [style.width.%]="porcentaje()"></div>
+          </div>
+        </div>
+      } @else if (!usuarioActual()) {
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-3 bg-blue-50 border border-blue-100 rounded-xl px-5 py-4">
+          <p class="text-sm text-blue-900">Inicia sesión para ver cuáles misiones ya resolviste.</p>
+          <button
+            (click)="iniciarSesion()"
+            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors"
+          >
+            Iniciar sesión
+          </button>
+        </div>
+      } @else {
+        <p class="mb-8 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
+          No se pudo cargar tu progreso en este momento.
+        </p>
+      }
+
+      <h2 class="text-xl font-bold text-slate-800 mb-4">Misiones</h2>
+
+      <ol class="space-y-3">
+        @for (mision of misiones(); track mision.retoId) {
+          <li>
+            <a
+              [routerLink]="['/curso', mision.retoId]"
+              class="flex items-center gap-4 border border-gray-100 rounded-xl p-4 hover:border-blue-300 hover:bg-blue-50/40 transition-colors"
+            >
+              <span
+                class="shrink-0 w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-bold"
+              >
+                {{ $index + 1 }}
+              </span>
+
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-slate-800 truncate">{{ mision.titulo }}</p>
+                <p class="text-sm text-gray-500">{{ mision.categoria }} · Nivel {{ mision.dificultad }}/5</p>
+              </div>
+
+              @if (progresoDisponible()) {
+                @if (mision.estado === 'resuelta') {
+                  <span class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                    ✓ Resuelta
+                  </span>
+                } @else {
+                  <span class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+                    Pendiente
+                  </span>
+                }
+              }
+            </a>
+          </li>
+        } @empty {
+          <li class="text-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+            Este curso todavía no tiene misiones.
+          </li>
+        }
+      </ol>
+    </div>
+  } @else {
+    <div class="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
+      <span class="text-6xl mb-4 block">👀</span>
+      <h2 class="text-2xl font-bold text-slate-900 mb-2">Curso no encontrado</h2>
+      <p class="text-gray-500 mb-6">El curso que buscas no existe o fue retirado.</p>
+      <a routerLink="/cursos" class="text-blue-600 hover:text-blue-700 font-medium">Ver todos los cursos</a>
+    </div>
+  }
+</div>
