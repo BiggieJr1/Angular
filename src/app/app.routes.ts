@@ -15,8 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'curso/:id',
-    loadComponent: () =>
-      import('./pages/cursos/detalle-curso/detalle-curso').then((m) => m.CursoDetalle),
+    loadComponent: () => import('./pages/cursos/detalle-curso/detalle-curso').then((m) => m.CursoDetalle),
   },
   {
     path: 'leccion/:id',
@@ -41,8 +40,7 @@ export const routes: Routes = [
       },
       {
         path: 'cursos',
-        loadChildren: () =>
-          import('./pages/cursos/cursos-maestro.routes').then((m) => m.CURSOS_MAESTRO_ROUTES),
+        loadChildren: () => import('./pages/cursos/cursos-maestro.routes').then((m) => m.CURSOS_MAESTRO_ROUTES),
       },
     ],
   },
