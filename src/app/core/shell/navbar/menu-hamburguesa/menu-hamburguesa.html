@@ -13,70 +13,9 @@
   </svg>
 </button>
 
-<!-- Fondo oscuro -->
-<div (click)="cerrar()" aria-hidden="true" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300" [class]="abierto() ? 'opacity-100' : 'opacity-0 pointer-events-none'"></div>
-
-<!-- Panel lateral -->
-<aside
-  id="menu-lateral"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Menú de navegación"
-  [attr.inert]="abierto() ? null : ''"
-  class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out"
-  [class]="abierto() ? 'translate-x-0' : '-translate-x-full'"
->
-  <button
-    type="button"
-    (click)="cerrar()"
-    aria-label="Cerrar menú"
-    class="absolute right-3 top-3 z-10 rounded-lg bg-white p-2 text-gray-400 hover:text-slate-800 hover:bg-gray-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-  >
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-  </button>
-
-  <div class="flex-1 overflow-y-auto">
-    @if (usuarioActual()) {
-      <section class="flex flex-col items-center gap-1 border-b border-gray-200 px-5 py-4 text-center">
-        <div class="flex h-20 w-20 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-2xl font-semibold text-slate-800" aria-hidden="true">
-          {{ iniciales() }}
-        </div>
-
-        <p class="mt-2 max-w-full truncate text-lg font-semibold text-slate-800">{{ nombreMostrado() }}</p>
-        <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">{{ usuarioActual()?.rol }}</span>
-
-        <button
-          type="button"
-          class="mt-3 rounded-md border-gray-300 bg-gray-100 px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-        >
-          Ver perfil
-        </button>
-      </section>
-    }
-    <nav class="px-3 py-4" [class.pt-14]="!usuarioActual()" (click)="cerrar()">
-      <!-- Enlaces básicos: solo en móvil, en escritorio ya están en el navbar -->
-      <div class="md:hidden space-y-1">
-        <a routerLink="/" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Inicio</a>
-        <a href="#" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Productos</a>
-        <a href="#" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Contacto</a>
-        @if (usuarioActual()) {
-          <div class="my-3 border-t border-gray-100"></div>
-        }
-      </div>
-
-      <div class="space-y-1">
-        @if (usuarioActual()) {
-          <a routerLink="/mi-progreso" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mi progreso</a>
-          <a routerLink="/mi-puntuacion" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mi puntuación</a>
-        }
-        @if (usuarioActual()?.rol === 'Maestro' || usuarioActual()?.rol === 'Admin') {
-          <a routerLink="/maestro/retos" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mis retos</a>
-          <a routerLink="/maestro/cursos" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mis cursos</a>
-        }
-        @if (usuarioActual()?.rol === 'Admin') {
-          <a routerLink="/admin/usuarios" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Admin</a>
-        }
-      </div>
-    </nav>
-  </div>
-</aside>
+<menu-panel [abierto]="abierto()" (cerrar)="cerrar()">
+  @if (usuarioActual(); as usuario) {
+    <menu-perfil [nombre]="nombreMostrado()" [rol]="usuario.rol" />
+  }
+  <menu-navegacion (click)="cerrar()" />
+</menu-panel>

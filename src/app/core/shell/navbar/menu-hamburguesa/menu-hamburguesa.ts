@@ -1,10 +1,12 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../data-access/auth.service';
+import { MenuNavegacionComponent } from './menu-navegacion/menu-navegacion.component';
+import { MenuPerfilComponent } from './menu-perfil/menu-perfil.component';
+import { MenuPanelComponent } from './menu-panel/menu-panel.component';
 
 @Component({
   selector: 'app-menu-hamburguesa',
-  imports: [RouterLink],
+  imports: [MenuPerfilComponent, MenuNavegacionComponent, MenuPanelComponent],
   templateUrl: './menu-hamburguesa.html',
   host: {
     '(document:keydown.escape)': 'cerrar()',
@@ -18,18 +20,6 @@ export class MenuHamburguesa {
   nombreMostrado = computed(() => {
     const usuario = this.usuarioActual();
     return usuario?.nombre?.trim() || usuario?.email?.split('@')[0] || '';
-  });
-
-  iniciales = computed(() => {
-    const palabras = this.nombreMostrado()
-      .split(/[\s._-]+/)
-      .filter(Boolean);
-
-    if (palabras.length === 0) return '?';
-
-    const primera = palabras[0][0];
-    const segunda = palabras.length > 1 ? palabras[1][0] : '';
-    return (primera + segunda).toUpperCase();
   });
 
   constructor() {

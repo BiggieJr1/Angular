@@ -1,0 +1,25 @@
+<nav class="px-3 py-4" [class.pt-14]="!usuarioActual()">
+  <!-- Enlaces básicos: solo en móvil, en escritorio ya están en el navbar -->
+  <div class="md:hidden space-y-1">
+    <a menu-enlace routerLink="/">Inicio</a>
+    <a menu-enlace href="#">Productos</a>
+    <a menu-enlace href="#">Contacto</a>
+    @if (usuarioActual()) {
+      <div class="my-3 border-t border-gray-100"></div>
+    }
+  </div>
+
+  <div class="space-y-1">
+    @if (usuarioActual()) {
+      <a menu-enlace routerLink="/mi-progreso">Mi progreso</a>
+      <a menu-enlace routerLink="/mi-puntuacion">Mi puntuación</a>
+    }
+    @if (isMaestroOrAdmin()) {
+      <a menu-enlace routerLink="/maestro/retos">Mis retos</a>
+      <a menu-enlace routerLink="/maestro/cursos">Mis cursos</a>
+    }
+    @if (isAdmin()) {
+      <a menu-enlace routerLink="/admin/usuarios">Admin</a>
+    }
+  </div>
+</nav>

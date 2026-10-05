@@ -1,0 +1,25 @@
+<!-- Fondo oscuro -->
+<div (click)="cerrar.emit()" aria-hidden="true" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300" [class]="abierto() ? 'opacity-100' : 'opacity-0 pointer-events-none'"></div>
+
+<aside
+  id="menu-lateral"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menú de navegación"
+  [attr.inert]="abierto() ? null : ''"
+  class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out"
+  [class]="abierto() ? 'translate-x-0' : '-translate-x-full'"
+>
+  <button
+    type="button"
+    (click)="cerrar.emit()"
+    aria-label="Cerrar menú"
+    class="absolute right-3 top-3 z-10 rounded-lg bg-white p-2 text-gray-400 hover:text-slate-800 hover:bg-gray-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+
+  <div class="flex-1 overflow-y-auto">
+    <ng-content />
+  </div>
+</aside>
