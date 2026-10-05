@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../data-access/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-buttons',
@@ -9,10 +10,11 @@ import { AuthService } from '../../../data-access/auth.service';
   imports: [FormsModule],
   templateUrl: './auth-buttons.html',
   styleUrl: './auth-buttons.css',
-  host: { '(document:keydown.escape)': 'cerrarModal()' }
+  host: { '(document:keydown.escape)': 'cerrarModal()' },
 })
 export class AuthButtons {
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   // Estado compartido en Auth: así otros componentes (ej. "Inscribirme" en un reto,
   // o el link de Admin en el navbar) también reaccionan al mismo login/logout.
@@ -39,9 +41,7 @@ export class AuthButtons {
   }
 
   ejecutarAccion() {
-    const accion$ = this.isLoginMode()
-      ? this.authService.iniciarSesion(this.emailInput, this.passInput)
-      : this.authService.registrar(this.emailInput, this.passInput, this.nombreInput);
+    const accion$ = this.isLoginMode() ? this.authService.iniciarSesion(this.emailInput, this.passInput) : this.authService.registrar(this.emailInput, this.passInput, this.nombreInput);
 
     accion$.subscribe({
       next: () => this.cerrarModal(),
@@ -71,5 +71,6 @@ export class AuthButtons {
 
   cerrarSesionJugador() {
     this.authService.cerrarSesion();
+    this.router.navigateByUrl('/');
   }
 }
