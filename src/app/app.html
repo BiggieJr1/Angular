@@ -1,20 +1,18 @@
 <main class="bg-gray-100 min-h-screen flex flex-col">
-     <app-navbar class="block sticky top-0 z-50"></app-navbar>
-  
-  <!-- Contenedor del Banner de Gamiprog: solo en el home -->
+  <app-navbar class="block sticky top-0 z-50"></app-navbar>
+
+  <!-- Banner a todo el ancho: solo en el home -->
   @if (enHome()) {
-    <div class="mx-auto px-0 sm:px-0 lg:px-8 py-8 w-full">
-      <div class="overflow-hidden rounded-2xl shadow-md">
-        <img
-          src="Gemini_Generated_Image_r0zz4fr0zz4fr0zz.png"
-          alt="Gamiprog - Nueva aventura de código"
-          class="block w-full h-auto"
-        >
-      </div>
-    </div>
+    <img
+      src="Gemini_Generated_Image_r0zz4fr0zz4fr0zz.png"
+      alt="Gamiprog - Nueva aventura de código"
+      class="block w-full h-auto"
+    >
   }
 
-  <router-outlet></router-outlet>
+  <div class="flex-1">
+    <router-outlet></router-outlet>
+  </div>
 </main>
 
 <footer class="bg-white border-t border-gray-200 shadow-sm mt-auto">

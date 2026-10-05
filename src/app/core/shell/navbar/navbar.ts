@@ -4,10 +4,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { AuthButtons } from './auth-buttons/auth-buttons';
 import { AuthService } from '../../data-access/auth.service';
+import { MenuHamburguesa } from './menu-hamburguesa/menu-hamburguesa';
 
 @Component({
   selector: 'app-navbar',
-  imports: [AuthButtons, RouterLink],
+  imports: [AuthButtons, RouterLink, MenuHamburguesa],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
   host: {
