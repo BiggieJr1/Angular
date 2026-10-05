@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { AuthButtons } from './auth-buttons/auth-buttons';
@@ -8,7 +8,7 @@ import { MenuHamburguesa } from './menu-hamburguesa/menu-hamburguesa';
 
 @Component({
   selector: 'app-navbar',
-  imports: [AuthButtons, RouterLink, MenuHamburguesa],
+  imports: [AuthButtons, MenuHamburguesa],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
   host: {

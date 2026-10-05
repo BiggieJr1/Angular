@@ -57,6 +57,7 @@
     <div class="space-y-1">
       @if (usuarioActual()) {
         <a routerLink="/mi-progreso" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mi progreso</a>
+        <a routerLink="/mi-puntuacion" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mi puntuación</a>
       }
       @if (usuarioActual()?.rol === 'Maestro' || usuarioActual()?.rol === 'Admin') {
         <a routerLink="/maestro/retos" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mis retos</a>
