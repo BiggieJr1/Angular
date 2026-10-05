@@ -1,0 +1,76 @@
+<section class="max-w-md mx-auto px-4 py-12">
+  @if (estado() === 'cargando') {
+    <div class="h-64 rounded-2xl bg-white border border-gray-200 animate-pulse"></div>
+  } @else if (estado() === 'invalida') {
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center">
+      <h1 class="text-xl font-bold text-slate-900 mb-2">Esta invitación ya no es válida</h1>
+      <p class="text-gray-600 mb-6">Pudo haber expirado o ya fue usada. Pídele a tu amigo que genere una nueva.</p>
+      <a routerLink="/" class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-6 rounded-lg transition-colors">
+        Ir al inicio
+      </a>
+    </div>
+  } @else if (estado() === 'aceptada' && invitador(); as inv) {
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center">
+      <h1 class="text-xl font-bold text-slate-900 mb-2">¡Listo!</h1>
+      <p class="text-gray-600 mb-6">Ahora tú y {{ inv.nombre }} son amigos en Gamiprog.</p>
+      <a routerLink="/" class="inline-block bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-6 rounded-lg transition-colors">
+        Ir al inicio
+      </a>
+    </div>
+  } @else if (invitador(); as inv) {
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center">
+      @if (inv.avatarUrl) {
+        <img [src]="inv.avatarUrl" [alt]="inv.nombre" class="w-24 h-24 rounded-full object-cover border border-gray-200 mx-auto mb-4">
+      } @else {
+        <div class="w-24 h-24 rounded-full bg-slate-900 text-white flex items-center justify-center text-4xl font-bold mx-auto mb-4">
+          {{ inicial() }}
+        </div>
+      }
+
+      <h1 class="text-xl font-bold text-slate-900">{{ inv.nombre }}</h1>
+      <p class="text-gray-600 mt-1 mb-6">te ha enviado una solicitud de amistad en Gamiprog.</p>
+
+      @if (error()) {
+        <div role="alert" class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded text-sm font-medium text-left">
+          {{ error() }}
+        </div>
+      }
+
+      @if (esPropia()) {
+        <p class="text-sm text-gray-500">Esta es tu propia invitación. Compártela con un amigo.</p>
+      } @else if (auth.usuarioActual()) {
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            (click)="aceptar()"
+            [disabled]="aceptando()"
+            class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {{ aceptando() ? 'Aceptando...' : 'Aceptar invitación' }}
+          </button>
+          <a routerLink="/" class="flex-1 border border-gray-200 bg-white hover:bg-gray-50 text-slate-800 font-bold py-2.5 rounded-lg transition-colors">
+            Ahora no
+          </a>
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500 mb-4">Inicia sesión o crea una cuenta para aceptarla.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            (click)="auth.abrirModal(true)"
+            class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors"
+          >
+            Iniciar sesión
+          </button>
+          <button
+            type="button"
+            (click)="auth.abrirModal(false)"
+            class="flex-1 border border-gray-200 bg-white hover:bg-gray-50 text-slate-800 font-bold py-2.5 rounded-lg transition-colors"
+          >
+            Registrarme
+          </button>
+        </div>
+      }
+    </div>
+  }
+</section>
