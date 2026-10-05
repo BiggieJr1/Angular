@@ -21,6 +21,7 @@ export class AuthButtons {
   isModalOpen = this.authService.isModalOpen;
   isLoginMode = this.authService.isLoginMode; // Para saber si mostramos "Entrar" o "Registrar"
   jugadorActual = this.authService.usuarioActual;
+  mensajeSesion = this.authService.mensajeSesion;
 
   // Variables conectadas al formulario
   emailInput = '';
