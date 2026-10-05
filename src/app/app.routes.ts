@@ -29,6 +29,11 @@ export const routes: Routes = [
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/progreso/progreso').then((m) => m.MiProgreso),
   },
+  {
+    path: 'mi-puntuacion',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/puntuacion/puntuacion').then((m) => m.MiPuntuacion),
+  },
 
   //Solo Admin
   {
