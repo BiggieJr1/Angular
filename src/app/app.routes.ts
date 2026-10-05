@@ -34,6 +34,11 @@ export const routes: Routes = [
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/puntuacion/puntuacion').then((m) => m.MiPuntuacion),
   },
+  {
+    path: 'mis-insignias',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/insignias/insignias').then((m) => m.MisInsignias),
+  },
 
   //Solo Admin
   {
