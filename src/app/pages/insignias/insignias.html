@@ -1,0 +1,76 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-8">
+    <h1 class="text-3xl font-sans text-slate-900 sm:text-4xl">Mis insignias</h1>
+    <p class="mt-3 text-lg text-gray-500">Los logros que has ganado y los que te faltan por desbloquear.</p>
+  </div>
+
+  @if (!usuarioActual()) {
+    <div class="text-center py-12 bg-blue-50 border border-blue-100 rounded-2xl">
+      <p class="text-blue-900 mb-4">Inicia sesión para ver tus insignias.</p>
+      <button (click)="iniciarSesion()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-colors">Iniciar sesión</button>
+    </div>
+  } @else if (cargando()) {
+    <p class="text-gray-500">Cargando tus insignias...</p>
+  } @else if (error()) {
+    <div class="text-center py-10 text-red-700 bg-red-50 rounded-xl border border-red-200">
+      <p>No se pudieron cargar tus insignias. Intenta de nuevo en unos minutos.</p>
+    </div>
+  } @else if (datos()) {
+    <!-- Resumen de la colección -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <p class="text-sm text-gray-500">Insignias ganadas</p>
+      <p class="text-3xl font-extrabold text-slate-900">
+        {{ obtenidas().length }}
+        @if (total() > obtenidas().length) {
+          <span class="text-lg font-medium text-gray-400">de {{ total() }}</span>
+        }
+      </p>
+    </div>
+
+    <!-- Ganadas -->
+    <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <h2 class="text-xl font-bold text-slate-800 mb-4">Ganadas ({{ obtenidas().length }})</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (i of obtenidas(); track i.insigniaId) {
+          <li class="flex items-start gap-4 border border-green-200 bg-green-50/40 rounded-xl p-4">
+            @if (tieneIcono(i.insigniaId, i.iconoUrl)) {
+              <img [src]="i.iconoUrl" [alt]="i.nombre" (error)="marcarIconoFallido(i.insigniaId)" class="w-14 h-14 shrink-0 object-contain" />
+            } @else {
+              <span class="w-14 h-14 shrink-0 flex items-center justify-center text-4xl" aria-hidden="true">🏅</span>
+            }
+            <div class="min-w-0">
+              <p class="font-semibold text-slate-800">{{ i.nombre }}</p>
+              <p class="text-sm text-gray-500">{{ i.descripcion }}</p>
+            </div>
+          </li>
+        } @empty {
+          <li class="col-span-full text-center py-6 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+            Aún no has ganado ninguna insignia. ¡Resuelve retos para conseguir la primera!
+          </li>
+        }
+      </ul>
+    </section>
+
+    <!-- Por desbloquear -->
+    @if (porDesbloquear().length > 0) {
+      <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Por desbloquear ({{ porDesbloquear().length }})</h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (i of porDesbloquear(); track i.insigniaId) {
+            <li class="flex items-start gap-4 border border-gray-200 rounded-xl p-4 opacity-60">
+              @if (tieneIcono(i.insigniaId, i.iconoUrl)) {
+                <img [src]="i.iconoUrl" [alt]="i.nombre" (error)="marcarIconoFallido(i.insigniaId)" class="w-14 h-14 shrink-0 object-contain grayscale" />
+              } @else {
+                <span class="w-14 h-14 shrink-0 flex items-center justify-center text-4xl grayscale" aria-hidden="true">🏅</span>
+              }
+              <div class="min-w-0">
+                <p class="font-semibold text-slate-800">{{ i.nombre }}</p>
+                <p class="text-sm text-gray-500">{{ i.descripcion }}</p>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  }
+</div>
