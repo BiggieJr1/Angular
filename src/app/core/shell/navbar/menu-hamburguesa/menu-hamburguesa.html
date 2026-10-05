@@ -1,0 +1,70 @@
+<button
+  type="button"
+  (click)="alternar()"
+  aria-label="Abrir menú"
+  aria-controls="menu-lateral"
+  [attr.aria-expanded]="abierto()"
+  class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="4" x2="20" y1="12" y2="12" />
+    <line x1="4" x2="20" y1="6" y2="6" />
+    <line x1="4" x2="20" y1="18" y2="18" />
+  </svg>
+</button>
+
+<!-- Fondo oscuro -->
+<div
+  (click)="cerrar()"
+  aria-hidden="true"
+  class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300"
+  [class]="abierto() ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+></div>
+
+<!-- Panel lateral -->
+<aside
+  id="menu-lateral"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menú de navegación"
+  [attr.inert]="abierto() ? null : ''"
+  class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out"
+  [class]="abierto() ? 'translate-x-0' : '-translate-x-full'"
+>
+  <div class="flex h-16 items-center justify-between border-b border-gray-200 px-5">
+    <span class="text-2xl font-sans text-slate-800 tracking-tight">Gamiprog</span>
+    <button
+      type="button"
+      (click)="cerrar()"
+      aria-label="Cerrar menú"
+      class="p-2 rounded-lg text-gray-400 hover:text-slate-800 hover:bg-gray-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-3 py-4" (click)="cerrar()">
+    <!-- Enlaces básicos: solo en móvil, en escritorio ya están en el navbar -->
+    <div class="md:hidden space-y-1">
+      <a routerLink="/" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Inicio</a>
+      <a href="#" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Productos</a>
+      <a href="#" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Contacto</a>
+      @if (usuarioActual()) {
+        <div class="my-3 border-t border-gray-100"></div>
+      }
+    </div>
+
+    <div class="space-y-1">
+      @if (usuarioActual()) {
+        <a routerLink="/mi-progreso" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mi progreso</a>
+      }
+      @if (usuarioActual()?.rol === 'Maestro' || usuarioActual()?.rol === 'Admin') {
+        <a routerLink="/maestro/retos" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mis retos</a>
+        <a routerLink="/maestro/cursos" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Mis cursos</a>
+      }
+      @if (usuarioActual()?.rol === 'Admin') {
+        <a routerLink="/admin/usuarios" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors">Admin</a>
+      }
+    </div>
+  </nav>
+</aside>
