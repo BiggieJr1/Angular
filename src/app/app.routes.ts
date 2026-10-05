@@ -22,6 +22,10 @@ export const routes: Routes = [
     path: 'leccion/:id',
     loadComponent: () => import('./pages/cursos/leccion/leccion').then((m) => m.Leccion),
   },
+  {
+    path: 'invitacion/:codigo',
+    loadComponent: () => import('./pages/invitacion/invitacion').then((m) => m.Invitacion),
+  },
 
   //Requiere sesión
   {
@@ -38,6 +42,11 @@ export const routes: Routes = [
     path: 'mis-insignias',
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/insignias/insignias').then((m) => m.MisInsignias),
+  },
+  {
+  path: 'mi-perfil',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/perfil/perfil').then((m) => m.MiPerfil),
   },
 
   //Solo Admin
