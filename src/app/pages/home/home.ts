@@ -7,16 +7,18 @@ import { Categoria } from './models';
 import { EmptyStateComponent } from '../../core/components';
 import { CursoCardComponent } from './curso-card/curso-card.component';
 import { SelectorCategoriasComponent } from './selector-categorias/selector-categorias.component';
+import { AuthService } from '../../core/data-access/auth.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SelectorCategoriasComponent, CursoCardComponent, EmptyStateComponent],
+  imports: [SelectorCategoriasComponent, CursoCardComponent, EmptyStateComponent, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   private readonly cursosService = inject(CursosService);
+  private readonly authService = inject(AuthService);
 
   protected readonly categorias: Categoria[] = [
     { nombre: 'Frontend', icono: '💻' },
@@ -35,6 +37,10 @@ export class Home {
 
   // Categoría activa. Vacío = sin filtro (se muestran todos)
   protected readonly categoriaSeleccionada = signal('');
+
+  protected readonly cursoSeleccionado = signal<Curso | undefined>(undefined);
+
+  protected readonly mostrarToast = signal(false);
 
   // Cuántos cursos hay por categoría (contador de cada tarjeta)
   protected readonly conteoPorCategoria = computed(() => {
@@ -56,5 +62,25 @@ export class Home {
   // Clic en la categoría ya activa = quitar el filtro
   protected alternarCategoria(nombre: string): void {
     this.categoriaSeleccionada.update((actual) => (actual === nombre ? '' : nombre));
+    this.cursoSeleccionado.set(undefined);
+  }
+  protected seleccionarCurso(curso: Curso) {
+    this.cursoSeleccionado.set(curso);
+  }
+
+  protected cerrarDetalles() {
+    this.cursoSeleccionado.set(undefined);
+  }
+
+  protected inscribirse() {
+    if (!this.authService.obtenerUsuarioActual()) {
+      this.authService.abrirModal(true);
+      return;
+    }
+
+    this.mostrarToast.set(true);
+    setTimeout(() => {
+      this.mostrarToast.set(false);
+    }, 3500);
   }
 }
