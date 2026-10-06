@@ -1,0 +1,47 @@
+<div class="space-y-6">
+  @if (progreso(); as p) {
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="bg-white border border-gray-200 rounded-2xl p-4">
+        <p class="text-sm text-gray-500">Nivel</p>
+        <p class="text-3xl font-bold text-slate-900">{{ p.nivelActual }}</p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-2xl p-4">
+        <p class="text-sm text-gray-500">Puntos</p>
+        <p class="text-3xl font-bold text-slate-900">{{ p.puntosTotales }}</p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-2xl p-4">
+        <p class="text-sm text-gray-500">Experiencia</p>
+        <p class="text-3xl font-bold text-slate-900">{{ p.experiencia }}</p>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-2xl p-4">
+        <p class="text-sm text-gray-500">Insignias</p>
+        <p class="text-3xl font-bold text-slate-900">{{ p.totalInsignias }}</p>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+      <h2 class="text-lg font-sans text-slate-800 mb-4">Mis retos</h2>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-2xl font-bold text-slate-900">{{ p.totalIntentos }}</p>
+          <p class="text-sm text-gray-500">Intentos</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-slate-900">{{ p.totalAprobados }}</p>
+          <p class="text-sm text-gray-500">Aprobados</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-slate-900">{{ tasaAprobacion() }}%</p>
+          <p class="text-sm text-gray-500">Aprobación</p>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">Aún no tienes puntaje. Resuelve tu primer reto para empezar a sumar.</div>
+  }
+
+  <div class="flex flex-col sm:flex-row gap-3">
+    <a routerLink="/mi-progreso" class="flex-1 text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg transition-colors"> Ver mi progreso </a>
+    <a routerLink="/mi-puntuacion" class="flex-1 text-center border border-gray-200 bg-white hover:bg-gray-50 text-slate-800 font-bold py-2.5 rounded-lg transition-colors"> Ver mi puntuación </a>
+  </div>
+</div>
