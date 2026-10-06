@@ -1,16 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
 import { AuthService } from '../../core/data-access/auth.service';
 import { PerfilService } from '../../core/data-access/perfil.service';
 import { CuentaResponse, PerfilResponse, ProgresoResponse } from '../../core/models/perfil.model';
 import { EditarPerfilModal } from './editar-perfil-modal/editar-perfil-modal';
 import { InvitarAmigosModal } from './invitar-amigos-modal/invitar-amigos-modal';
+import { ResumenProgresoComponent } from './resumen-progreso/resumen-progreso.component';
+import { PerfilTabsComponent } from './perfil-tabs/perfil-tabs.component';
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [RouterLink, DatePipe, EditarPerfilModal, InvitarAmigosModal],
+  imports: [DatePipe, EditarPerfilModal, InvitarAmigosModal, PerfilTabsComponent],
   templateUrl: './perfil.html',
 })
 export class MiPerfil {
@@ -29,11 +30,6 @@ export class MiPerfil {
 
   nombre = computed(() => this.perfil()?.nombre ?? this.auth.usuarioActual()?.email ?? 'Usuario');
   inicial = computed(() => this.nombre().charAt(0).toUpperCase());
-
-  tasaAprobacion = computed(() => {
-    const p = this.progreso();
-    return p && p.totalIntentos > 0 ? Math.round((p.totalAprobados / p.totalIntentos) * 100) : 0;
-  });
 
   alGuardar(actualizado: PerfilResponse) {
     this.perfil.set(actualizado);
