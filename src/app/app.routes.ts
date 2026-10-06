@@ -44,7 +44,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/insignias/insignias').then((m) => m.MisInsignias),
   },
   {
-  path: 'mi-perfil',
+    path: 'leaderboard',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/clasificacion/clasificacion').then((m) => m.Clasificacion),
+  },
+  {
+    path: 'mi-perfil',
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/perfil/perfil').then((m) => m.MiPerfil),
   },
