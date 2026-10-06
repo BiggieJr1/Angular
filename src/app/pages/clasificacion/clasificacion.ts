@@ -1,11 +1,15 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/data-access/auth.service';
 import { ClasificacionService } from './clasificacion.service';
 import { ClasificacionEntrada, ClasificacionPagina } from './models/clasificacion.model';
 
+export type AmbitoClasificacion = 'global' | 'amigos';
+
 @Component({
   selector: 'app-clasificacion',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './clasificacion.html',
 })
 export class Clasificacion {
@@ -14,7 +18,13 @@ export class Clasificacion {
 
   usuarioActual = this.authService.usuarioActual;
 
+  // Solo cambia al iniciar/cerrar sesión (no cuando se carga el nombre del perfil), para no repetir la consulta
+  private usuarioId = computed(() => this.usuarioActual()?.usuarioId);
+
+  ambito = signal<AmbitoClasificacion>('global');
+  esAmigos = computed(() => this.ambito() === 'amigos');
   pagina = signal(1);
+
   // Se incrementa para volver a pedir la misma página (botón "Reintentar")
   private recarga = signal(0);
   datos = signal<ClasificacionPagina | null>(null);
@@ -35,10 +45,12 @@ export class Clasificacion {
   constructor() {
     // Se recarga al cambiar de página o si el usuario inicia/cierra sesión
     effect(() => {
-      const usuario = this.usuarioActual();
+      const usuarioId = this.usuarioId(); // antes: const usuario = this.usuarioActual();
       const pagina = this.pagina();
+      const ambito = this.ambito(); // línea nueva
       this.recarga();
-      if (!usuario) {
+      if (!usuarioId) {
+        // antes: if (!usuario) {
         this.datos.set(null);
         this.nombres.set({});
         this.error.set(false);
@@ -49,7 +61,8 @@ export class Clasificacion {
       const solicitud = ++this.solicitud;
       this.cargando.set(true);
       this.error.set(false);
-      this.clasificacionService.consultarGlobal(pagina).subscribe({
+      const consulta = ambito === 'amigos' ? this.clasificacionService.consultarAmigos(pagina) : this.clasificacionService.consultarGlobal(pagina);
+      consulta.subscribe({
         next: (respuesta) => {
           if (solicitud !== this.solicitud) return;
           this.datos.set(respuesta);
@@ -92,6 +105,16 @@ export class Clasificacion {
     if (this.haySiguiente()) {
       this.pagina.update((p) => p + 1);
     }
+  }
+
+  cambiarAmbito(ambito: AmbitoClasificacion) {
+    if (ambito === this.ambito()) {
+      return;
+    }
+    // Se limpia para no mostrar por un instante datos del otro ámbito y se vuelve a la primera página
+    this.datos.set(null);
+    this.pagina.set(1);
+    this.ambito.set(ambito);
   }
 
   reintentar() {
