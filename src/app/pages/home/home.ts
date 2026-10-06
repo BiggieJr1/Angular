@@ -14,7 +14,6 @@ import { AuthService } from '../../core/data-access/auth.service';
   standalone: true,
   imports: [SelectorCategoriasComponent, CursoCardComponent, EmptyStateComponent, RouterLink],
   templateUrl: './home.html',
-  styleUrl: './home.css',
 })
 export class Home {
   private readonly cursosService = inject(CursosService);
@@ -54,9 +53,7 @@ export class Home {
   // Cursos visibles según la categoría activa
   protected readonly cursosFiltrados = computed(() => {
     const categoria = this.categoriaSeleccionada();
-    return categoria
-      ? this.cursos().filter((curso) => curso.categoria === categoria)
-      : this.cursos();
+    return categoria ? this.cursos().filter((curso) => curso.categoria === categoria) : this.cursos();
   });
 
   // Clic en la categoría ya activa = quitar el filtro

@@ -7,7 +7,6 @@ import { DatosInsignias } from './models/insignia.model';
   selector: 'app-mis-insignias',
   standalone: true,
   templateUrl: './insignias.html',
-  styleUrl: './insignias.css',
 })
 export class MisInsignias {
   private authService = inject(AuthService);

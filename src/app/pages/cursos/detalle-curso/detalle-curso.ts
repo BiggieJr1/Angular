@@ -10,7 +10,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './detalle-curso.html',
-  styleUrl: './detalle-curso.css',
 })
 export class CursoDetalle implements OnInit {
   // Inyectamos las herramientas necesarias

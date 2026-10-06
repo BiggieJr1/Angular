@@ -13,7 +13,6 @@ interface MisionConEstado extends MisionCurso {
   standalone: true,
   imports: [RouterLink],
   templateUrl: './ruta-curso.html',
-  styleUrl: './ruta-curso.css',
 })
 export class RutaCurso implements OnInit {
   private route = inject(ActivatedRoute);

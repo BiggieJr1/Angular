@@ -13,7 +13,6 @@ const XP_POR_NIVEL = 100;
   standalone: true,
   imports: [RouterLink],
   templateUrl: './puntuacion.html',
-  styleUrl: './puntuacion.css',
 })
 export class MiPuntuacion {
   private authService = inject(AuthService);

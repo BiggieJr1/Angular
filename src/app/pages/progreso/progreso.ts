@@ -9,7 +9,6 @@ import { DatosProgreso, RetoProgreso } from './models/progreso.model';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './progreso.html',
-  styleUrl: './progreso.css',
 })
 export class MiProgreso {
   private authService = inject(AuthService);
@@ -37,9 +36,7 @@ export class MiProgreso {
   );
 
   totalRetos = computed(() => this.retos().length);
-  porcentaje = computed(() =>
-    this.totalRetos() === 0 ? 0 : Math.round((this.resueltos().length / this.totalRetos()) * 100),
-  );
+  porcentaje = computed(() => (this.totalRetos() === 0 ? 0 : Math.round((this.resueltos().length / this.totalRetos()) * 100)));
 
   constructor() {
     // Se recarga solo si el usuario inicia o cierra sesión estando en esta pantalla

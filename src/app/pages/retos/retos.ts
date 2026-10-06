@@ -8,7 +8,6 @@ import { Curso } from './models/reto.model';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './retos.html',
-  styleUrl: './retos.css',
 })
 export class MaestroRetos implements OnInit {
   private cursoService = inject(CursosService);

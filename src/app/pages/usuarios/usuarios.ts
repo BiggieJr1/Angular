@@ -8,7 +8,6 @@ import { UsuarioAdmin, ROLES_DISPONIBLES } from './models/usuario-admin.model';
   standalone: true,
   imports: [DatePipe],
   templateUrl: './usuarios.html',
-  styleUrl: './usuarios.css',
 })
 export class AdminUsuarios implements OnInit {
   private usuariosAdmin = inject(UsuariosAdmin);
@@ -44,11 +43,7 @@ export class AdminUsuarios implements OnInit {
 
     this.usuariosAdmin.cambiarRol(usuario.usuarioId, nuevoRol).subscribe({
       next: (actualizado) => {
-        this.usuarios.update((lista) =>
-          lista.map((u) =>
-            u.usuarioId === usuario.usuarioId ? { ...u, rol: actualizado.rol } : u,
-          ),
-        );
+        this.usuarios.update((lista) => lista.map((u) => (u.usuarioId === usuario.usuarioId ? { ...u, rol: actualizado.rol } : u)));
         this.guardandoId.set(null);
       },
       error: () => {

@@ -8,7 +8,6 @@ import { CursoConMisiones } from '../models/curso.model';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './catalogo-cursos.html',
-  styleUrl: './catalogo-cursos.css',
 })
 export class CatalogoCursos implements OnInit {
   private cursosAlumno = inject(CursosAlumno);
@@ -20,7 +19,7 @@ export class CatalogoCursos implements OnInit {
   ngOnInit(): void {
     // El listado de cursos es público: no requiere sesión
     this.cursosAlumno.listar().subscribe({
-      next: cursos => {
+      next: (cursos) => {
         this.cursos.set(cursos);
         this.cargando.set(false);
       },

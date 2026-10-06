@@ -13,7 +13,6 @@ import { CATEGORIAS_RETO } from '../../retos/models/reto-admin.model';
   standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './formulario-curso.html',
-  styleUrl: './formulario-curso.css',
 })
 export class CursoForm implements OnInit {
   private route = inject(ActivatedRoute);
