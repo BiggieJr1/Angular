@@ -10,7 +10,6 @@ import { MenuHamburguesa } from './menu-hamburguesa/menu-hamburguesa';
   selector: 'app-navbar',
   imports: [AuthButtons, MenuHamburguesa],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
   host: {
     class: 'transition-transform duration-300',
     '[class.-translate-y-full]': '!visible()',

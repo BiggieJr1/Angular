@@ -7,7 +7,6 @@ import { ClasificacionEntrada, ClasificacionPagina } from './models/clasificacio
   selector: 'app-clasificacion',
   standalone: true,
   templateUrl: './clasificacion.html',
-  styleUrl: './clasificacion.css',
 })
 export class Clasificacion {
   private authService = inject(AuthService);

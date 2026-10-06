@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './auth-buttons.html',
-  styleUrl: './auth-buttons.css',
   host: { '(document:keydown.escape)': 'cerrarModal()' },
 })
 export class AuthButtons {
