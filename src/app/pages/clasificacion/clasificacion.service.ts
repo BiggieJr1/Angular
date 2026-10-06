@@ -53,4 +53,10 @@ export class ClasificacionService {
     }
     return consulta;
   }
+
+  consultarAmigos(pagina: number): Observable<ClasificacionPagina> {
+    return this.http.get<ClasificacionPagina>(`${API_BASE_URL}/leaderboard/amistades`, {
+      params: { pagina },
+    });
+  }
 }
