@@ -1,9 +1,11 @@
 import { Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'menu-perfil',
   templateUrl: './menu-perfil.component.html',
   host: { class: 'block' },
+  imports: [RouterLink],
 })
 export class MenuPerfilComponent {
   nombre = input.required<string>();

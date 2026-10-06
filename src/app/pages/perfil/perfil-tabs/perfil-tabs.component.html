@@ -1,0 +1,44 @@
+<div class="space-y-6">
+  <div role="tablist" aria-label="Secciones del perfil" class="flex gap-1 border-b border-gray-200">
+    <button
+      type="button"
+      role="tab"
+      id="tab-resumen"
+      aria-controls="panel-resumen"
+      [attr.aria-selected]="pestana() === 'resumen'"
+      (click)="seleccionar('resumen')"
+      class="px-4 py-2 text-sm font-bold -mb-px border-b-2 transition-colors"
+      [class]="pestana() === 'resumen' ? 'border-slate-900 text-slate-900' : 'border-transparent text-gray-500 hover:text-slate-800'"
+    >
+      Resumen
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-amigos"
+      aria-controls="panel-amigos"
+      [attr.aria-selected]="pestana() === 'amigos'"
+      (click)="seleccionar('amigos')"
+      class="px-4 py-2 text-sm font-bold -mb-px border-b-2 transition-colors"
+      [class]="pestana() === 'amigos' ? 'border-slate-900 text-slate-900' : 'border-transparent text-gray-500 hover:text-slate-800'"
+    >
+      Amigos
+      @if (totalAmigos() !== null) {
+        ({{ totalAmigos() }})
+      }
+    </button>
+  </div>
+
+  @if (pestana() === 'resumen') {
+    <div role="tabpanel" id="panel-resumen" aria-labelledby="tab-resumen">
+      <app-resumen-progreso [progreso]="progreso()" />
+    </div>
+  }
+
+  <!-- Se crea la primera vez que se abre la pestaña y luego solo se oculta, para no volver a pedir la lista -->
+  @if (amigosVisitado()) {
+    <div role="tabpanel" id="panel-amigos" aria-labelledby="tab-amigos" [hidden]="pestana() !== 'amigos'">
+      <app-lista-amigos (totalCambiado)="totalAmigos.set($event)" />
+    </div>
+  }
+</div>
