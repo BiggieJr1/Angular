@@ -8,7 +8,6 @@ import { CursoConMisiones } from './models/curso.model';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './cursos.html',
-  styleUrl: './cursos.css',
 })
 export class MaestroCursos implements OnInit {
   private cursosAdmin = inject(CursosAdmin);

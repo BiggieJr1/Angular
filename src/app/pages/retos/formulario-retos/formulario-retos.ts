@@ -10,7 +10,6 @@ import { CasoPruebaAdmin, CATEGORIAS_RETO, RetoFormValue } from '../models/reto-
   standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './formulario-retos.html',
-  styleUrl: './formulario-retos.css',
 })
 export class RetoForm implements OnInit {
   private route = inject(ActivatedRoute);
