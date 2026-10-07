@@ -14,6 +14,7 @@ export interface CursoConMisiones {
   titulo: string;
   descripcion: string;
   categoria: string;
+  imagenUrl: string | null;
   fechaCreacion: string;
   misiones: MisionCurso[];
 }
@@ -22,6 +23,7 @@ export interface CursoFormValue {
   titulo: string;
   descripcion: string;
   categoria: string;
+  imagenUrl: string;
 }
 
 // HU-10: estado de una misión para el alumno que tiene sesión iniciada.

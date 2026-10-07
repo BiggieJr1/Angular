@@ -7,7 +7,7 @@ import { ConsultarRetoResponse, Curso } from '../retos/models/reto.model';
 // Las claves deben coincidir con las categorías del carrusel de filtros en home.ts.
 // imagenUrl es opcional: si una categoría no tiene imagen propia, se usa el degradado
 // de color como respaldo (ver ESTILO_DEFAULT).
-const ESTILOS_POR_CATEGORIA: Record<
+export const ESTILOS_POR_CATEGORIA: Record<
   string,
   { gradienteBg: string; badgeColor: string; imagenUrl?: string }
 > = {
@@ -47,7 +47,8 @@ const ESTILOS_POR_CATEGORIA: Record<
     imagenUrl: 'img/categorias/cloud.jpg',
   },
 };
-const ESTILO_DEFAULT = {
+
+export const ESTILO_DEFAULT: { gradienteBg: string; badgeColor: string; imagenUrl?: string } = {
   gradienteBg: 'from-slate-500 to-slate-700',
   badgeColor: 'bg-slate-100 text-slate-800',
 };
@@ -63,6 +64,7 @@ function aCurso(reto: ConsultarRetoResponse): Curso {
     gradienteBg: estilo.gradienteBg,
     badgeColor: estilo.badgeColor,
     imagenUrl: estilo.imagenUrl,
+    tipo: 'reto',
   };
 }
 
