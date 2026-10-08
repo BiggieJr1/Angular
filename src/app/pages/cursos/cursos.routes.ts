@@ -8,7 +8,7 @@ export const CURSOS_ROUTES: Routes = [
     component: CatalogoCursos,
   },
   {
-    path: 'id',
+    path: ':id',
     component: RutaCurso,
   },
 ];
