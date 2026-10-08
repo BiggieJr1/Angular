@@ -1,0 +1,70 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <a routerLink="/maestro/retos" class="text-sm text-blue-600 hover:text-blue-700 font-medium">← Volver a mis retos</a>
+
+  <div class="mt-4 mb-8">
+    <h1 class="text-3xl font-sans text-slate-900 mb-2">Resultados por alumno</h1>
+    @if (titulo()) {
+      <p class="text-gray-500">{{ titulo() }}</p>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p class="text-gray-500">Cargando resultados...</p>
+  } @else if (error() === 'sin-acceso') {
+    <div class="text-center py-10 text-red-700 bg-red-50 rounded-xl border border-red-200">
+      <p>Este reto no es tuyo, así que no puedes ver sus resultados.</p>
+    </div>
+  } @else if (error() === 'no-encontrado') {
+    <div class="text-center py-10 text-gray-600 bg-gray-50 rounded-xl border border-gray-200">
+      <p>No se encontró el reto.</p>
+    </div>
+  } @else if (error()) {
+    <div class="text-center py-10 text-red-700 bg-red-50 rounded-xl border border-red-200">
+      <p>No se pudieron cargar los resultados. Intenta de nuevo en unos minutos.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <p class="text-sm text-gray-500">Alumnos que lo intentaron</p>
+        <p class="text-3xl font-extrabold text-slate-900">{{ resultados().length }}</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <p class="text-sm text-gray-500">Alumnos que lo aprobaron</p>
+        <p class="text-3xl font-extrabold text-slate-900">{{ totalAprobados() }}</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+          <tr>
+            <th class="px-6 py-3">Alumno</th>
+            <th class="px-6 py-3 text-right">Intentos</th>
+            <th class="px-6 py-3">Estado</th>
+            <th class="px-6 py-3">Último intento</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (r of resultados(); track r.usuarioId) {
+            <tr>
+              <td class="px-6 py-4 text-sm text-slate-800">{{ nombreDe(r) }}</td>
+              <td class="px-6 py-4 text-sm text-gray-700 text-right">{{ r.totalIntentos }}</td>
+              <td class="px-6 py-4">
+                @if (r.aprobado) {
+                  <span class="text-xs font-semibold rounded-full px-2.5 py-1 bg-green-100 text-green-700">Aprobado</span>
+                } @else {
+                  <span class="text-xs font-semibold rounded-full px-2.5 py-1 bg-gray-100 text-gray-600">Sin aprobar</span>
+                }
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ r.ultimoIntento | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-6 py-8 text-center text-gray-500">Todavía ningún alumno ha intentado este reto.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
