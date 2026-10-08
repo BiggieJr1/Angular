@@ -25,4 +25,5 @@ export interface Curso {
   gradienteBg: string;
   badgeColor: string;
   imagenUrl?: string;
+  tipo?: 'curso' | 'reto';
 }

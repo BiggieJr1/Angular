@@ -29,6 +29,7 @@ export class CursoForm implements OnInit {
     titulo: '',
     descripcion: '',
     categoria: CATEGORIAS_RETO[0],
+    imagenUrl: '',
   };
 
   misiones = signal<MisionCurso[]>([]);
@@ -60,6 +61,7 @@ export class CursoForm implements OnInit {
           titulo: curso.titulo,
           descripcion: curso.descripcion,
           categoria: curso.categoria,
+          imagenUrl: curso.imagenUrl ?? '',
         };
         this.misiones.set(curso.misiones);
         this.cargando.set(false);
