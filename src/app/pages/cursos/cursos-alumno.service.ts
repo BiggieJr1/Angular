@@ -43,6 +43,17 @@ export class CursosAlumno {
     return this.http.get<CursoConMisiones>(`${API_BASE_URL}/cursos/${cursoId}`);
   }
 
+    // Ids de los cursos en los que el alumno está inscrito (requiere sesión).
+  obtenerCursosInscritos(): Observable<Set<string>> {
+    return this.http
+      .get<string[]>(`${API_BASE_URL}/cursos/mis-inscripciones`)
+      .pipe(map((ids) => new Set(ids)));
+  }
+
+  inscribirse(cursoId: string): Observable<unknown> {
+    return this.http.post(`${API_BASE_URL}/cursos/${cursoId}/inscripcion`, {});
+  }
+
   // Ids de los retos que el alumno ya aprobó al menos una vez (requiere sesión).
   obtenerRetosResueltos(usuarioId: string): Observable<Set<string>> {
     return this.http

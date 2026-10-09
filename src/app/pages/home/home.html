@@ -130,21 +130,12 @@
               </ul>
             </div>
             
-            @if (curso.tipo === 'curso') {
-              <a
-                [routerLink]="['/cursos', curso.id]"
-                class="block text-center w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-blue-500"
-              >
-                Ver ruta del curso
-              </a>
-            } @else {
-              <a
-                [routerLink]="['/curso', curso.id]"
-                class="block text-center w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-blue-500"
-              >
-                Ver reto
-              </a>
-            }
+            <a
+              [routerLink]="['/cursos', curso.id]"
+              class="block text-center w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-blue-500"
+            >
+              Ver ruta del curso
+            </a>
           </div>
         </div>
       </div>
