@@ -1,8 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { CursosService } from '../cursos/cursos.service';
 import { CursosAlumno } from '../cursos/cursos-alumno.service';
 import { Curso } from '../retos/models/reto.model';
 import { Categoria } from './models';
@@ -17,7 +16,6 @@ import { SelectorCategoriasComponent } from './selector-categorias/selector-cate
   templateUrl: './home.html',
 })
 export class Home {
-  private readonly cursosService = inject(CursosService);
   private readonly cursosAlumno = inject(CursosAlumno);
 
   protected readonly categorias: Categoria[] = [
@@ -30,13 +28,9 @@ export class Home {
     { nombre: 'Cloud', icono: '☁️' },
   ];
 
-  // Catálogo público: cursos reales primero, luego los retos individuales.
-  // Si una de las dos peticiones falla, se muestra la otra.
+  // Catálogo público: solo cursos reales (GET /api/cursos)
   private readonly cursos = toSignal(
-    forkJoin({
-      cursos: this.cursosAlumno.listarTarjetas().pipe(catchError(() => of([] as Curso[]))),
-      retos: this.cursosService.obtenerCursos().pipe(catchError(() => of([] as Curso[]))),
-    }).pipe(map(({ cursos, retos }) => [...cursos, ...retos])),
+    this.cursosAlumno.listarTarjetas().pipe(catchError(() => of([] as Curso[]))),
     { initialValue: [] as Curso[] },
   );
 

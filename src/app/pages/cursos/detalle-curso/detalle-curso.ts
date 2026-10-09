@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CursosService } from '../cursos.service';
 import { AuthService } from '../../../core/data-access/auth.service';
 import { Curso } from '../../retos/models/reto.model';
-import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-curso',
@@ -12,43 +11,37 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   templateUrl: './detalle-curso.html',
 })
 export class CursoDetalle implements OnInit {
-  // Inyectamos las herramientas necesarias
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private cursoService = inject(CursosService);
   private authService = inject(AuthService);
 
-  // Variable para guardar el curso encontrado
+  // Aquí "curso" es en realidad un reto
   curso = signal<Curso | undefined>(undefined);
 
-  mostrarToast = signal(false);
-
   ngOnInit(): void {
-    // 1. Extraemos el 'id' de la URL (ej: /curso/3fa8...) - los retos usan GUID, no un número
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam) {
       this.curso.set(undefined);
       return;
     }
 
-    // 2. Buscamos el curso utilizando el servicio; si el backend responde 404, no existe
     this.cursoService.obtenerCursoPorId(idParam).subscribe({
       next: (curso) => this.curso.set(curso),
       error: () => this.curso.set(undefined),
     });
   }
 
-  inscribirse() {
-    // Explorar el catálogo es público, pero inscribirse requiere cuenta
+  empezar() {
+    const curso = this.curso();
+    if (!curso) return;
+
+    // Resolver un reto requiere sesión
     if (!this.authService.obtenerUsuarioActual()) {
       this.authService.abrirModal(true);
       return;
     }
 
-    this.mostrarToast.set(true);
-
-    // 3. El setTimeout oculta el Toast automáticamente después de 3.5 segundos
-    setTimeout(() => {
-      this.mostrarToast.set(false);
-    }, 3500);
+    this.router.navigate(['/leccion', curso.id]);
   }
 }
