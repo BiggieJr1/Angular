@@ -4,11 +4,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RetosAdmin } from '../retos-admin.service';
 import { CasoPruebaAdmin, CATEGORIAS_RETO, RetoFormValue } from '../models/reto-admin.model';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 @Component({
   selector: 'app-formulario-retos',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, MonacoEditorModule],
   templateUrl: './formulario-retos.html',
 })
 export class RetoForm implements OnInit {
@@ -17,9 +18,36 @@ export class RetoForm implements OnInit {
   private retosAdmin = inject(RetosAdmin);
 
   categorias = CATEGORIAS_RETO;
+  lenguajesSoportados = [
+    { id: 'javascript', nombre: 'JavaScript' },
+    { id: 'typescript', nombre: 'TypeScript' },
+    { id: 'python', nombre: 'Python' },
+    { id: 'csharp', nombre: 'C#' },
+    { id: 'java', nombre: 'Java' },
+    { id: 'cpp', nombre: 'C++' },
+    { id: 'sql', nombre: 'SQL' },
+    { id: 'html', nombre: 'HTML' },
+    { id: 'css', nombre: 'CSS' }
+  ];
 
-  // Si hay id en la URL, estamos editando ese reto; si no, estamos creando uno nuevo
+  actualizarLenguajeEditor(nuevoLenguaje: string) {
+    this.editorOptions = { 
+      ...this.editorOptions, 
+      language: nuevoLenguaje 
+    };
+  }
+
   retoId: string | null = null;
+
+  editorOptions = { 
+    theme: 'vs',
+    language: 'javascript', 
+    automaticLayout: true,
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    padding: { top: 16, bottom: 16 },
+    fontSize: 14
+  };
 
   form: RetoFormValue = {
     titulo: '',
@@ -57,6 +85,7 @@ export class RetoForm implements OnInit {
           codigoBase: reto.codigoBase,
           solucionEsperada: reto.solucionEsperada,
         };
+        this.actualizarLenguajeEditor(reto.lenguajeRequerido);
         this.casosPrueba.set(reto.casosPrueba);
         this.cargando.set(false);
       },

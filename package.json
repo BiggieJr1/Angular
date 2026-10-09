@@ -17,6 +17,8 @@
     "@angular/forms": "^22.0.0",
     "@angular/platform-browser": "^22.0.0",
     "@angular/router": "^22.0.0",
+    "monaco-editor": "^0.56.0",
+    "ngx-monaco-editor-v2": "^22.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
